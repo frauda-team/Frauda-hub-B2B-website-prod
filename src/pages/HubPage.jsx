@@ -189,33 +189,7 @@ function Team() {
               <button className="btn btn-ghost">Talk to the team <Icon.Arrow size={14} /></button>
             </div>
           </div>
-          <div style={{
-            minHeight: 320, borderRadius: 'var(--r-lg)', overflow: 'hidden',
-            background: 'var(--accent-grad)', position: 'relative',
-            padding: '44px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
-          }}>
-            <div aria-hidden="true" style={{
-              position: 'absolute', inset: 0, opacity: 0.14,
-              backgroundImage: 'linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)',
-              backgroundSize: '32px 32px',
-            }} />
-            <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px 24px' }}>
-              {[
-                ['2024', 'Founded in Riga'],
-                ['2', 'Portfolio companies'],
-                ['3', 'Research institutions'],
-                ['EU', 'Innovation backed'],
-              ].map(([n, l]) => (
-                <div key={l}>
-                  <div style={{
-                    fontFamily: 'var(--font-display)', fontSize: 40, fontWeight: 700,
-                    color: '#fff', lineHeight: 1, letterSpacing: '-0.03em',
-                  }}>{n}</div>
-                  <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', marginTop: 6 }}>{l}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <InstitutionLogos />
         </div>
       </div>
     </section>
@@ -251,6 +225,46 @@ function FinalCTA() {
         </div>
       </div>
     </section>
+  )
+}
+
+function InstitutionLogos() {
+  const logos = [
+    { src: '/logo-rtu.png', alt: 'Riga Technical University', label: 'Riga Technical University' },
+    { src: '/logo-ul.png',  alt: 'University of Latvia',      label: 'University of Latvia' },
+    { src: '/logo-ba.png',  alt: 'BA School of Business and Finance', label: 'BA School of Business' },
+  ]
+
+  return (
+    <div style={{ position: 'relative', minHeight: 300 }}>
+      {/* RTU — top left */}
+      <div style={{ position: 'absolute', top: 0, left: '5%', width: '42%' }}>
+        <LogoCard {...logos[0]} />
+      </div>
+      {/* UL — top right */}
+      <div style={{ position: 'absolute', top: 0, right: '5%', width: '42%' }}>
+        <LogoCard {...logos[1]} />
+      </div>
+      {/* BA — bottom centre */}
+      <div style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)', width: '42%' }}>
+        <LogoCard {...logos[2]} />
+      </div>
+    </div>
+  )
+}
+
+function LogoCard({ src, alt, label }) {
+  return (
+    <div className="card" style={{
+      padding: '20px 16px', display: 'flex', flexDirection: 'column',
+      alignItems: 'center', gap: 12, textAlign: 'center',
+    }}>
+      <img
+        src={src} alt={alt}
+        style={{ width: '100%', maxWidth: 120, height: 72, objectFit: 'contain' }}
+      />
+      <span style={{ fontSize: 12, color: 'var(--fg-muted)', lineHeight: 1.4 }}>{label}</span>
+    </div>
   )
 }
 

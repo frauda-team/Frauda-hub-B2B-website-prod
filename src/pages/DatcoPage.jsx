@@ -30,7 +30,7 @@ function Hero() {
         <div className="hero-badge" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32, flexWrap: 'wrap' }}>
           <Link to="/hub" className="hub-chip">
             <FraudaMark size={14} />
-            A Frauda Hub company
+            A Frauda Hub product
           </Link>
           <div className="chip chip-accent">
             <StatusDot tone="ok" /> Live demo

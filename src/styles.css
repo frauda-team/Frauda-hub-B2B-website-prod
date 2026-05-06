@@ -71,8 +71,13 @@ html, body {
 a { color: inherit; }
 
 /* ── page transition ─────────────────────────────────────── */
+/* opacity-only: avoids creating a transform stacking context that breaks position:fixed modals */
 .page-wrap {
-  animation: fh-pagein 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: fh-pageinfade 0.35s ease-out both;
+}
+@keyframes fh-pageinfade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ── staggered hero animations ───────────────────────────── */

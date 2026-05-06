@@ -1,9 +1,10 @@
 import React from 'react'
+import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
 import { FraudaMark, Icon, StatusDot, GridBg, LinkedInIcon, FraudaWordmark } from '../components/Brand'
 import FishpoDemo from '../components/FishpoDemo'
-import Dashboard from '../components/Dashboard'
+import DashboardDemo from '../components/DashboardDemo'
 
 export default function FishpoPage({ theme, onToggleTheme }) {
   const [modal, setModal] = React.useState(null)
@@ -19,11 +20,11 @@ export default function FishpoPage({ theme, onToggleTheme }) {
       <Footer />
       {modal && (
         <Modal
-          title={modal === 'demo' ? 'Fishpo — email scam detection demo' : 'Fishpo admin console'}
+          title={modal === 'demo' ? 'Fishpo — detection video' : 'Fishpo — admin console video'}
           onClose={() => setModal(null)}
         >
           {modal === 'demo'      && <FishpoDemo />}
-          {modal === 'dashboard' && <Dashboard />}
+          {modal === 'dashboard' && <DashboardDemo />}
         </Modal>
       )}
     </div>
@@ -44,7 +45,7 @@ function Hero({ onOpenDemo }) {
         <div className="hero-badge" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32, flexWrap: 'wrap' }}>
           <Link to="/hub" className="hub-chip">
             <FraudaMark size={14} />
-            A Frauda Hub company
+            A Frauda Hub product
           </Link>
           <div className="chip chip-accent">
             <StatusDot tone="ok" /> Pilot open
@@ -129,7 +130,7 @@ function DemoCTA({ onOpenDemo, onOpenDashboard }) {
           <div>
             <div className="h-eyebrow" style={{ marginBottom: 14 }}>Product videos</div>
             <div className="h-display" style={{ fontSize: 'clamp(28px, 3vw, 40px)', maxWidth: 560 }}>
-              See Fishpo stop a phishing attack — and run the admin console.
+              See Fishpo stop a phishing attack in 10 seconds — and tour the admin console.
             </div>
             <div style={{ fontSize: 15, color: 'var(--fg-muted)', marginTop: 14, maxWidth: 480, lineHeight: 1.6 }}>
               Two video walkthroughs: the end-user experience and the security team's console. No install or signup.
@@ -253,27 +254,28 @@ function Modal({ title, children, onClose }) {
     }
   }, [onClose])
 
-  return (
+  return createPortal(
     <div
       onClick={onClose}
       style={{
-        position: 'fixed', inset: 0, zIndex: 200,
-        background: 'rgba(7,16,31,0.75)',
-        backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
+        position: 'fixed', inset: 0, zIndex: 9000,
+        background: 'rgba(7,16,31,0.82)',
+        backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        padding: 24,
+        padding: '24px 20px',
         animation: 'fh-fadein .2s ease-out',
       }}
     >
+      {/* title bar */}
       <div
         onClick={e => e.stopPropagation()}
         style={{
-          width: '100%', maxWidth: 1100, display: 'flex', alignItems: 'center',
-          justifyContent: 'space-between', marginBottom: 12,
-          color: 'rgba(255,255,255,0.85)', fontFamily: 'var(--font-sans)',
+          width: '65vw', maxWidth: 1100, minWidth: 320,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          marginBottom: 10, color: 'rgba(255,255,255,0.8)', fontFamily: 'var(--font-sans)',
         }}
       >
-        <span style={{ fontSize: 13, fontWeight: 500, letterSpacing: '0.01em' }}>{title}</span>
+        <span style={{ fontSize: 13, fontWeight: 500 }}>{title}</span>
         <button
           onClick={onClose}
           aria-label="Close"
@@ -283,27 +285,33 @@ function Modal({ title, children, onClose }) {
             display: 'grid', placeItems: 'center', cursor: 'pointer',
             transition: 'background .12s',
           }}
-          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.18)'}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
           onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
         >
           <Icon.X size={14} />
         </button>
       </div>
+
+      {/* video container — ~65% of screen, 16:9-ish */}
       <div
         onClick={e => e.stopPropagation()}
         style={{
-          width: '100%', maxWidth: 1100,
-          height: 'min(680px, calc(100vh - 120px))',
-          borderRadius: 12, overflow: 'hidden',
-          boxShadow: '0 24px 80px rgba(0,0,0,0.55)',
+          width: '65vw', maxWidth: 1100, minWidth: 320,
+          height: 'calc(65vw * 0.58)',
+          maxHeight: 'calc(100vh - 140px)',
+          minHeight: 280,
+          borderRadius: 14, overflow: 'hidden',
+          boxShadow: '0 32px 96px rgba(0,0,0,0.65)',
           animation: 'fh-risein 0.3s cubic-bezier(0.22,1,0.36,1) both',
         }}
       >
         {children}
       </div>
-      <div style={{ marginTop: 12, fontSize: 12, color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-sans)' }}>
-        Press <kbd style={{ fontFamily: 'var(--font-mono)', background: 'rgba(255,255,255,0.1)', padding: '1px 5px', borderRadius: 4 }}>Esc</kbd> to close
+
+      <div style={{ marginTop: 12, fontSize: 12, color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-sans)' }}>
+        Press <kbd style={{ fontFamily: 'var(--font-mono)', background: 'rgba(255,255,255,0.08)', padding: '1px 5px', borderRadius: 4 }}>Esc</kbd> to close
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
