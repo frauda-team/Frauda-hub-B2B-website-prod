@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Datco — Synthetic Data for FinTech</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf9; --fg: #1c1917; --muted: #78716c;
+    --accent: #2563eb; --accent-dark: #1d4ed8;
+    --accent-light: #dbeafe; --accent-lighter: #eff6ff;
+    --border: #e7e5e4; --card: #ffffff;
+    --red: #dc2626; --green: #16a34a; --orange: #ea580c;
+    --radius: 10px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--fg);line-height:1.6;-webkit-font-smoothing:antialiased;}
+  nav{position:sticky;top:0;z-index:100;background:rgba(250,250,249,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 2rem;}
+  nav .inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .logo{font-weight:800;font-size:1.35rem;letter-spacing:-0.03em;color:var(--fg);text-decoration:none;}
+  .logo span{color:var(--accent);}
+  .nav-tabs{display:flex;gap:0;}
+  .nav-tab{padding:0.5rem 1.25rem;font-size:0.875rem;font-weight:600;color:var(--muted);text-decoration:none;border-radius:8px;transition:all 0.15s;cursor:pointer;}
+  .nav-tab:hover{color:var(--fg);background:#f5f5f4;}
+  .nav-tab.active{color:var(--accent);background:var(--accent-lighter);}
+  .page{display:none;}.page.active{display:block;}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 2rem;}
+  .hero{padding:5rem 0 3rem;text-align:center;}
+  .hero-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:0.75rem;font-weight:500;color:var(--accent);background:var(--accent-lighter);padding:4px 14px;border-radius:20px;margin-bottom:1.25rem;letter-spacing:0.03em;}
+  .hero h1{font-size:clamp(2.5rem,5.5vw,3.75rem);font-weight:800;letter-spacing:-0.04em;line-height:1.1;}
+  .hero h1 em{font-style:normal;color:var(--accent);}
+  .hero .sub{margin-top:1.25rem;font-size:1.2rem;color:var(--muted);max-width:580px;margin-left:auto;margin-right:auto;}
+  .s-label{font-family:'DM Mono',monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:0.5rem;font-weight:500;}
+  .problem-section{padding:3rem 0;}
+  .problem-visual{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-top:1.25rem;}
+  .p-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;text-align:center;overflow:hidden;}
+  .p-card .p-icon{font-size:2.5rem;margin-bottom:0.75rem;display:block;}
+  .p-card h3{font-size:1.15rem;font-weight:700;margin-bottom:0.35rem;}
+  .p-card p{font-size:0.85rem;color:var(--muted);}
+  .p-card .big-stat{font-size:2.25rem;font-weight:800;color:var(--red);letter-spacing:-0.03em;margin:0.5rem 0 0.25rem;}
+  .p-card .big-stat.orange{color:var(--orange);}
+  .p-card .big-stat.blue{color:var(--accent);}
+  .market-section{padding:3rem 0;}
+  .market-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:1.25rem;margin-top:1.25rem;}
+  .chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;}
+  .chart-card h3{font-size:0.95rem;font-weight:600;margin-bottom:1rem;}
+  .chart-card .chart-sub{font-size:0.75rem;color:var(--muted);font-family:'DM Mono',monospace;margin-top:0.75rem;}
+  .bar-chart{width:100%;}
+  .bar-label{font-family:'DM Mono',monospace;font-size:11px;fill:var(--muted);}
+  .bar-value{font-family:'DM Sans',sans-serif;font-size:12px;fill:var(--fg);font-weight:700;}
+  .donut-card{display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .donut-legend{display:flex;flex-direction:column;gap:0.5rem;margin-top:1rem;width:100%;}
+  .legend-item{display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;}
+  .legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .whynow-section{padding:3rem 0;}
+  .timeline{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-top:1.5rem;position:relative;}
+  .timeline::before{content:'';position:absolute;top:36px;left:5%;right:5%;height:3px;background:var(--accent-light);border-radius:2px;z-index:0;}
+  .tl-item{text-align:center;position:relative;z-index:1;padding:0 0.75rem;}
+  .tl-dot{width:20px;height:20px;background:var(--accent);border:4px solid var(--accent-light);border-radius:50%;margin:26px auto 1rem;}
+  .tl-item h3{font-size:1rem;font-weight:700;margin-bottom:0.3rem;}
+  .tl-item p{font-size:0.82rem;color:var(--muted);}
+  .tl-item .tl-year{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);font-weight:500;margin-bottom:0.15rem;}
+  .solution-section{padding:3rem 0;}
+  .flow-visual{display:flex;align-items:stretch;gap:0;margin-top:1.5rem;}
+  .flow-step{flex:1;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;text-align:center;}
+  .flow-step .flow-num{width:40px;height:40px;background:var(--accent);color:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;margin-bottom:0.75rem;}
+  .flow-step h3{font-size:1.05rem;font-weight:700;margin-bottom:0.25rem;}
+  .flow-step p{font-size:0.82rem;color:var(--muted);}
+  .flow-arrow{display:flex;align-items:center;justify-content:center;width:50px;flex-shrink:0;color:var(--accent);font-size:1.75rem;font-weight:300;}
+  .comp-section{padding:3rem 0;}
+  .comp-visual{display:grid;grid-template-columns:1fr;gap:0.75rem;margin-top:1.25rem;}
+  .comp-row{display:grid;grid-template-columns:140px 1fr 90px 90px;gap:1rem;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:0.85rem 1.25rem;font-size:0.85rem;}
+  .comp-row.highlight{border-color:var(--accent);background:var(--accent-lighter);}
+  .comp-row .name{font-weight:700;}
+  .comp-row.highlight .name{color:var(--accent);}
+  .comp-bar-wrap{height:10px;background:#f5f5f4;border-radius:5px;overflow:hidden;}
+  .comp-bar{height:100%;border-radius:5px;transition:width 0.6s ease;}
+  .badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:0.7rem;font-weight:600;text-align:center;}
+  .badge.green{background:#dcfce7;color:var(--green);}.badge.orange{background:#fff7ed;color:var(--orange);}
+  .comp-header{display:grid;grid-template-columns:140px 1fr 90px 90px;gap:1rem;padding:0 1.25rem;font-size:0.7rem;font-family:'DM Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.25rem;}
+  .cta-section{text-align:center;padding:3rem 0 4rem;}
+  .btn{display:inline-block;margin-top:1rem;padding:0.85rem 2.5rem;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;text-decoration:none;transition:background 0.15s;}
+  .btn:hover{background:var(--accent-dark);}
+  .btn:disabled{opacity:0.5;cursor:not-allowed;}
+  .divider{padding:0 2rem;max-width:1100px;margin:0 auto;}
+  .divider hr{border:none;border-top:1px solid var(--border);}
+
+  /* ===== DEMO ===== */
+  .demo-wrap{max-width:800px;margin:0 auto;padding:2.5rem 2rem 4rem;}
+  .demo-header{text-align:center;margin-bottom:2rem;}
+  .demo-header h1{font-size:2rem;font-weight:800;letter-spacing:-0.03em;}
+  .demo-header p{color:var(--muted);font-size:1.05rem;margin-top:0.5rem;}
+  .stepper{display:flex;align-items:center;justify-content:center;gap:0.35rem;margin-bottom:2.5rem;}
+  .stepper-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:all 0.3s;}
+  .stepper-dot.done{background:var(--accent);}
+  .stepper-dot.current{background:var(--accent);width:28px;border-radius:5px;}
+  .stepper-line{width:16px;height:2px;background:var(--border);transition:background 0.3s;}
+  .stepper-line.done{background:var(--accent);}
+  .qcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:2.5rem;display:none;}
+  .qcard.active{display:block;animation:fadeUp 0.35s ease both;}
+  .qcard .qlabel{font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem;}
+  .qcard h2{font-size:1.4rem;font-weight:700;margin-bottom:0.35rem;}
+  .qcard .qhint{font-size:0.88rem;color:var(--muted);margin-bottom:1.5rem;}
+  .opts{display:flex;flex-direction:column;gap:0.6rem;}
+  .opt{display:flex;align-items:flex-start;padding:1rem 1.25rem;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:all 0.15s;gap:0.85rem;}
+  .opt:hover{border-color:var(--accent);background:#fafbff;}
+  .opt.sel{border-color:var(--accent);background:var(--accent-light);}
+  .opt .ck{width:20px;height:20px;border:2px solid var(--border);border-radius:50%;flex-shrink:0;margin-top:2px;transition:all 0.15s;display:flex;align-items:center;justify-content:center;}
+  .opt.sel .ck{border-color:var(--accent);background:var(--accent);}
+  .opt.sel .ck::after{content:'';width:7px;height:7px;background:#fff;border-radius:50%;}
+  .opt .olabel{font-size:1rem;font-weight:600;line-height:1.3;}
+  .opt .odesc{font-size:0.82rem;color:var(--muted);margin-top:0.15rem;line-height:1.4;}
+  .opt.multi .ck{border-radius:4px;}
+  .opt.multi.sel .ck{border-radius:4px;}
+  .opt.multi.sel .ck::after{content:'✓';width:auto;height:auto;background:none;color:#fff;font-size:12px;font-weight:700;border-radius:0;}
+  .qnav{display:flex;justify-content:space-between;margin-top:2rem;}
+  .btn2{padding:0.75rem 1.75rem;background:transparent;border:1px solid var(--border);border-radius:var(--radius);font-family:inherit;font-size:0.95rem;font-weight:600;cursor:pointer;color:var(--muted);transition:all 0.15s;}
+  .btn2:hover{border-color:var(--fg);color:var(--fg);}
+  .btnsm{padding:0.75rem 2rem;font-size:0.95rem;}
+
+  .summary-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:0;display:none;overflow:hidden;}
+  .summary-card.active{display:block;animation:fadeUp 0.35s ease both;}
+  .summary-top{padding:2rem 2.5rem 1.5rem;border-bottom:1px solid var(--border);}
+  .summary-top h2{font-size:1.4rem;font-weight:800;margin-bottom:0.25rem;}
+  .summary-top p{font-size:0.9rem;color:var(--muted);}
+  .ai-badge{display:inline-flex;align-items:center;gap:0.35rem;font-family:'DM Mono',monospace;font-size:0.7rem;font-weight:500;color:var(--accent);background:var(--accent-lighter);padding:3px 10px;border-radius:12px;margin-bottom:0.75rem;}
+  .ai-badge .pulse{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.5s ease infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  .config-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid var(--border);}
+  .config-item{padding:1.25rem 2.5rem;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:0.15rem;}
+  .config-item:nth-child(odd){border-right:1px solid var(--border);}
+  .config-item .ci-label{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;}
+  .config-item .ci-value{font-size:1rem;font-weight:700;}
+  .config-item .ci-why{font-size:0.78rem;color:var(--accent);font-style:italic;margin-top:0.1rem;}
+  .cols-section{padding:1.25rem 2.5rem;border-bottom:1px solid var(--border);}
+  .cols-section .ci-label{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.6rem;}
+  .col-chips{display:flex;flex-wrap:wrap;gap:0.4rem;}
+  .col-chip{padding:5px 12px;border-radius:16px;font-size:0.78rem;font-weight:500;border:1px solid var(--border);background:var(--bg);cursor:pointer;transition:all 0.15s;user-select:none;}
+  .col-chip:hover{border-color:var(--accent);}
+  .col-chip.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .ai-adjust{padding:1.25rem 2.5rem;border-bottom:1px solid var(--border);display:flex;gap:0.75rem;align-items:center;}
+  .ai-adjust input{flex:1;padding:0.65rem 1rem;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.88rem;background:var(--bg);color:var(--fg);}
+  .ai-adjust input:focus{outline:none;border-color:var(--accent);}
+  .ai-adjust input::placeholder{color:#a8a29e;}
+  .ai-adjust button{padding:0.65rem 1.25rem;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:0.85rem;font-weight:600;cursor:pointer;white-space:nowrap;}
+  .ai-response{padding:0 2.5rem 1.25rem;display:none;}
+  .ai-response.show{display:block;animation:fadeUp 0.3s ease both;}
+  .ai-bubble{background:var(--accent-lighter);border-radius:10px;padding:0.85rem 1.1rem;font-size:0.85rem;color:var(--fg);border-left:3px solid var(--accent);}
+  .preview-section{padding:1.25rem 2.5rem;}
+  .preview-section .ci-label{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.6rem;}
+  .preview-table-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;overflow-x:auto;}
+  .prev-table{width:100%;font-size:0.8rem;font-family:'DM Mono',monospace;border-collapse:collapse;}
+  .prev-table th{padding:0.55rem 0.75rem;text-align:left;font-weight:600;color:var(--accent);background:#f5f5f4;border-bottom:1px solid var(--border);white-space:nowrap;}
+  .prev-table td{padding:0.5rem 0.75rem;border-bottom:1px solid var(--border);white-space:nowrap;}
+  .prev-table tr:last-child td{border-bottom:none;}
+  .prev-table .fraud-yes{color:var(--red);font-weight:600;}
+  .prev-table .fraud-no{color:var(--green);}
+  .summary-actions{padding:1.5rem 2.5rem;display:flex;gap:1rem;justify-content:flex-end;align-items:center;}
+  .gen-overlay{display:none;text-align:center;padding:4rem 2rem;background:var(--card);border:1px solid var(--border);border-radius:14px;}
+  .gen-overlay.active{display:block;animation:fadeUp 0.35s ease both;}
+  .spinner{width:52px;height:52px;border:4px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 1.25rem;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .gen-overlay p{color:var(--fg);font-size:1.15rem;font-weight:600;}
+  .gen-step{font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--accent);margin-top:0.75rem;}
+  .final-result{display:none;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+  .final-result.active{display:block;animation:fadeUp 0.35s ease both;}
+  .final-top{padding:2.5rem;text-align:center;border-bottom:1px solid var(--border);}
+  .final-icon{width:72px;height:72px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:1rem;background:#dcfce7;}
+  .final-top h2{font-size:1.75rem;font-weight:800;margin-bottom:0.35rem;}
+  .final-top>p{color:var(--muted);font-size:1rem;}
+  .final-meta{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--border);}
+  .fm-item{padding:1rem 1.5rem;text-align:center;border-right:1px solid var(--border);}
+  .fm-item:last-child{border-right:none;}
+  .fm-item .fm-val{font-size:1.25rem;font-weight:800;color:var(--accent);}
+  .fm-item .fm-label{font-size:0.75rem;color:var(--muted);margin-top:0.1rem;}
+  .final-preview{padding:1.5rem 2.5rem;}
+  .final-preview .ci-label{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.6rem;}
+  .final-actions{padding:1.5rem 2.5rem;display:flex;gap:1rem;justify-content:center;}
+  footer{text-align:center;padding:2rem;font-size:0.72rem;color:#a8a29e;font-family:'DM Mono',monospace;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+<nav><div class="inner"><a href="#" class="logo" onclick="showPage('landing');return false;">dat<span>co</span></a><div class="nav-tabs"><a class="nav-tab active" id="nav-pitch" onclick="showPage('landing')">Pitch</a><a class="nav-tab" id="nav-demo" onclick="showPage('demo')">Live Demo</a></div></div></nav>
+
+<div class="page active" id="page-landing">
+  <div class="wrap"><div class="hero"><div class="hero-badge">synthetic data platform for fintech</div><h1>FinTech needs data.<br><em>It can't get it.</em></h1><p class="sub">Datco generates synthetic financial datasets so startups can build, test, and ship — without waiting months for data access.</p></div></div>
+  <div class="divider"><hr></div>
+  <div class="wrap"><div class="problem-section"><div class="s-label">The Problem</div><div class="problem-visual">
+    <div class="p-card"><div class="p-icon">&#x1F512;</div><div class="big-stat">€1.6B</div><h3>in GDPR fines (2023)</h3><p>Real financial data is locked behind compliance walls. Sharing it means legal risk.</p></div>
+    <div class="p-card"><div class="p-icon">&#x23F3;</div><div class="big-stat orange">3–12 mo</div><h3>to get data access</h3><p>Negotiating data-sharing agreements with banks. Startups don't have that runway.</p></div>
+    <div class="p-card"><div class="p-icon">&#x1F4B8;</div><div class="big-stat blue">$50K+</div><h3>to license real data</h3><p>Transaction datasets cost tens of thousands. Early-stage teams can't afford it.</p></div>
+  </div></div></div>
+  <div class="divider"><hr></div>
+  <div class="wrap"><div class="market-section"><div class="s-label">Market Opportunity</div><div class="market-grid">
+    <div class="chart-card"><h3>Synthetic Data Market Growth</h3>
+      <svg class="bar-chart" viewBox="0 0 480 240">
+        <line x1="60" y1="30" x2="460" y2="30" stroke="#e7e5e4" stroke-width="0.5"/><line x1="60" y1="70" x2="460" y2="70" stroke="#e7e5e4" stroke-width="0.5"/><line x1="60" y1="110" x2="460" y2="110" stroke="#e7e5e4" stroke-width="0.5"/><line x1="60" y1="150" x2="460" y2="150" stroke="#e7e5e4" stroke-width="0.5"/><line x1="60" y1="190" x2="460" y2="190" stroke="#e7e5e4" stroke-width="0.5"/>
+        <text x="55" y="34" text-anchor="end" class="bar-label" font-size="9">$4B</text><text x="55" y="74" text-anchor="end" class="bar-label" font-size="9">$3B</text><text x="55" y="114" text-anchor="end" class="bar-label" font-size="9">$2B</text><text x="55" y="154" text-anchor="end" class="bar-label" font-size="9">$1B</text><text x="55" y="194" text-anchor="end" class="bar-label" font-size="9">$0</text>
+        <rect x="85" y="180" width="44" height="10" fill="#93c5fd" rx="3"/><text x="107" y="200" text-anchor="middle" class="bar-label">2024</text><text x="107" y="176" text-anchor="middle" class="bar-value" font-size="10">$0.4B</text>
+        <rect x="155" y="168" width="44" height="22" fill="#93c5fd" rx="3"/><text x="177" y="200" text-anchor="middle" class="bar-label">2025</text><text x="177" y="164" text-anchor="middle" class="bar-value" font-size="10">$0.5B</text>
+        <rect x="225" y="156" width="44" height="34" fill="var(--accent)" rx="3"/><text x="247" y="200" text-anchor="middle" class="bar-label">2026</text><text x="247" y="150" text-anchor="middle" class="bar-value" fill="var(--accent)" font-size="11">$0.7B</text>
+        <rect x="295" y="120" width="44" height="70" fill="#93c5fd" rx="3"/><text x="317" y="200" text-anchor="middle" class="bar-label">2028</text><text x="317" y="116" text-anchor="middle" class="bar-value" font-size="10">$1.7B</text>
+        <rect x="365" y="65" width="44" height="125" fill="#93c5fd" rx="3"/><text x="387" y="200" text-anchor="middle" class="bar-label">2030</text><text x="387" y="61" text-anchor="middle" class="bar-value" font-size="10">$3.1B</text>
+        <rect x="435" y="42" width="44" height="148" fill="#60a5fa" rx="3"/><text x="457" y="200" text-anchor="middle" class="bar-label">2031</text><text x="457" y="38" text-anchor="middle" class="bar-value" font-size="10">$3.7B</text>
+        <path d="M107 175 Q280 80 457 45" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.5"/>
+      </svg><div class="chart-sub">~35% CAGR · Source: Mordor Intelligence, Fortune BI, 2026</div></div>
+    <div style="display:flex;flex-direction:column;gap:1.25rem;">
+      <div class="chart-card donut-card" style="flex:1;"><h3>Top Use Cases for Synthetic Data</h3>
+        <svg viewBox="0 0 160 160" width="130" height="130"><circle cx="80" cy="80" r="55" fill="none" stroke="#e7e5e4" stroke-width="18"/><circle cx="80" cy="80" r="55" fill="none" stroke="var(--accent)" stroke-width="18" stroke-dasharray="160 186" stroke-dashoffset="86" stroke-linecap="round"/><circle cx="80" cy="80" r="55" fill="none" stroke="#93c5fd" stroke-width="18" stroke-dasharray="128 218" stroke-dashoffset="-74" stroke-linecap="round"/><text x="80" y="76" text-anchor="middle" font-family="DM Sans" font-weight="800" font-size="18" fill="var(--fg)">BFSI</text><text x="80" y="94" text-anchor="middle" font-family="DM Mono" font-size="10" fill="var(--muted)">#1 vertical</text></svg>
+        <div class="donut-legend"><div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>AI/ML model training (46%)</div><div class="legend-item"><div class="legend-dot" style="background:#93c5fd"></div>Test data management (37%)</div><div class="legend-item"><div class="legend-dot" style="background:#e7e5e4"></div>Other (17%)</div></div></div>
+      <div class="chart-card" style="text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;"><div style="font-size:2.75rem;font-weight:800;color:var(--accent);letter-spacing:-0.03em;">60%</div><div style="font-size:0.9rem;color:var(--muted);margin-top:0.15rem;">of AI training data will be</div><div style="font-size:0.9rem;font-weight:700;">synthetic by 2026</div><div class="chart-sub">Gartner</div></div>
+    </div>
+  </div></div></div>
+  <div class="divider"><hr></div>
+  <div class="wrap"><div class="whynow-section"><div class="s-label">Why Now</div><div class="timeline">
+    <div class="tl-item"><div class="tl-year">August 2026</div><div class="tl-dot"></div><h3>EU AI Act kicks in</h3><p>Credit scoring &amp; fraud detection = <strong>high-risk AI</strong>. Synthetic data is the compliance path.</p></div>
+    <div class="tl-item"><div class="tl-year">2025 — 2030</div><div class="tl-dot"></div><h3>FinTech boom</h3><p><strong>+$1T growth</strong> at ~33% CAGR. Thousands of startups need data on day one.</p></div>
+    <div class="tl-item"><div class="tl-year">March 2025</div><div class="tl-dot"></div><h3>Big tech is betting</h3><p><strong>NVIDIA acquired Gretel Labs</strong>. Space validated — but tools are enterprise-only.</p></div>
+  </div></div></div>
+  <div class="divider"><hr></div>
+  <div class="wrap"><div class="solution-section"><div class="s-label">Our Solution</div><h2 style="font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.25rem;">Answer questions. Get data.</h2><p style="color:var(--muted);font-size:0.95rem;">No code. No ML expertise. No waiting.</p>
+    <div class="flow-visual"><div class="flow-step"><div class="flow-num">1</div><h3>Describe</h3><p>Smart questionnaire about your product, stage, and needs</p></div><div class="flow-arrow">&rarr;</div><div class="flow-step"><div class="flow-num">2</div><h3>AI configures</h3><p>AI builds your dataset spec. Review, adjust, preview.</p></div><div class="flow-arrow">&rarr;</div><div class="flow-step"><div class="flow-num">3</div><h3>Generate & Ship</h3><p>HPC cluster generates. Download CSV, JSON, Parquet.</p></div></div>
+  </div></div>
+  <div class="divider"><hr></div>
+  <div class="wrap"><div class="comp-section"><div class="s-label">Competitive Landscape</div><h2 style="font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:1.25rem;">Current tools aren't built for startups</h2>
+    <div class="comp-header"><div>Company</div><div>Ease of use</div><div>Focus</div><div>Price</div></div>
+    <div class="comp-visual">
+      <div class="comp-row"><div class="name">MOSTLY AI</div><div><div class="comp-bar-wrap"><div class="comp-bar" style="width:35%;background:#f97316;"></div></div></div><div><span class="badge orange">Multi</span></div><div style="font-weight:700;color:var(--red);">$$$</div></div>
+      <div class="comp-row"><div class="name">Tonic.ai</div><div><div class="comp-bar-wrap"><div class="comp-bar" style="width:30%;background:#f97316;"></div></div></div><div><span class="badge orange">Multi</span></div><div style="font-weight:700;color:var(--red);">$$$</div></div>
+      <div class="comp-row"><div class="name">Gretel (NVIDIA)</div><div><div class="comp-bar-wrap"><div class="comp-bar" style="width:20%;background:var(--red);"></div></div></div><div><span class="badge orange">Multi</span></div><div style="font-weight:700;color:var(--orange);">$$</div></div>
+      <div class="comp-row"><div class="name">Hazy</div><div><div class="comp-bar-wrap"><div class="comp-bar" style="width:35%;background:#f97316;"></div></div></div><div><span class="badge orange">Multi</span></div><div style="font-weight:700;color:var(--red);">$$$</div></div>
+      <div class="comp-row highlight"><div class="name">Datco</div><div><div class="comp-bar-wrap"><div class="comp-bar" style="width:95%;background:var(--accent);"></div></div></div><div><span class="badge green">FinTech</span></div><div style="font-weight:700;color:var(--green);">$</div></div>
+    </div>
+  </div></div>
+  <div class="wrap"><div class="cta-section"><h2 style="font-size:1.75rem;font-weight:800;">See it in action</h2><p style="color:var(--muted);font-size:1rem;">Walk through the experience a FinTech startup would have.</p><button class="btn" onclick="showPage('demo')">Try the Demo &rarr;</button></div></div>
+</div>
+
+<!-- ===== DEMO ===== -->
+<div class="page" id="page-demo">
+  <div class="demo-wrap">
+    <div class="demo-header"><h1>Let's build your dataset</h1><p>6 quick questions — then our AI configures everything for you.</p></div>
+    <div class="stepper" id="stepper"></div>
+
+    <div class="qcard active" id="q1"><div class="qlabel">Step 1 of 6</div><h2>What FinTech product are you building?</h2><div class="qhint">This determines the data schema and statistical patterns we generate.</div>
+      <div class="opts" data-q="product">
+        <div class="opt" data-v="fraud_detection"><div class="ck"></div><div><div class="olabel">Fraud detection / prevention</div><div class="odesc">Transaction anomalies, suspicious patterns, account takeover signals</div></div></div>
+        <div class="opt" data-v="credit_scoring"><div class="ck"></div><div><div class="olabel">Credit scoring / lending</div><div class="odesc">Creditworthiness profiles, repayment histories, default patterns</div></div></div>
+        <div class="opt" data-v="aml"><div class="ck"></div><div><div class="olabel">AML &amp; compliance monitoring</div><div class="odesc">Suspicious transaction flows, sanctions screening, KYC records</div></div></div>
+        <div class="opt" data-v="payments"><div class="ck"></div><div><div class="olabel">Payment processing / optimization</div><div class="odesc">Payment flows, authorization rates, settlement data, chargebacks</div></div></div>
+        <div class="opt" data-v="insurance"><div class="ck"></div><div><div class="olabel">Insurance / risk underwriting</div><div class="odesc">Claims histories, risk factors, policyholder profiles</div></div></div>
+      </div><div class="qnav"><div></div><button class="btn btnsm" id="next1" onclick="goNext(1)" disabled>Continue &rarr;</button></div></div>
+
+    <div class="qcard" id="q2"><div class="qlabel">Step 2 of 6</div><h2>What stage is your product at?</h2><div class="qhint">We adjust dataset size, quality, and complexity based on where you are.</div>
+      <div class="opts" data-q="stage">
+        <div class="opt" data-v="research"><div class="ck"></div><div><div class="olabel">Research / proof of concept</div><div class="odesc">Small diverse datasets to validate your approach quickly</div></div></div>
+        <div class="opt" data-v="mvp"><div class="ck"></div><div><div class="olabel">MVP / early testing</div><div class="odesc">Realistic distributions, enough data to demo to investors or early users</div></div></div>
+        <div class="opt" data-v="production"><div class="ck"></div><div><div class="olabel">Production model training</div><div class="odesc">Large-scale, statistically rigorous data for real model performance</div></div></div>
+        <div class="opt" data-v="scaling"><div class="ck"></div><div><div class="olabel">Scaling / retraining existing models</div><div class="odesc">Augment real data, stress-test edge cases, improve coverage</div></div></div>
+      </div><div class="qnav"><button class="btn2" onclick="goBack(2)">&larr; Back</button><button class="btn btnsm" id="next2" onclick="goNext(2)" disabled>Continue &rarr;</button></div></div>
+
+    <div class="qcard" id="q3"><div class="qlabel">Step 3 of 6</div><h2>What's the core data you need?</h2><div class="qhint">Choose the primary dataset structure. You can fine-tune columns later.</div>
+      <div class="opts" data-q="datatype">
+        <div class="opt" data-v="transactions"><div class="ck"></div><div><div class="olabel">Transaction records</div><div class="odesc">Payments, transfers, card operations — timestamped financial events</div></div></div>
+        <div class="opt" data-v="profiles"><div class="ck"></div><div><div class="olabel">Customer profiles</div><div class="odesc">Demographics, KYC data, account info, verification status</div></div></div>
+        <div class="opt" data-v="credit"><div class="ck"></div><div><div class="olabel">Credit &amp; loan records</div><div class="odesc">Applications, repayment histories, debt-to-income, defaults</div></div></div>
+        <div class="opt" data-v="linked"><div class="ck"></div><div><div class="olabel">Linked dataset (transactions + profiles)</div><div class="odesc">Relational data — profiles linked to transaction history</div></div></div>
+      </div><div class="qnav"><button class="btn2" onclick="goBack(3)">&larr; Back</button><button class="btn btnsm" id="next3" onclick="goNext(3)" disabled>Continue &rarr;</button></div></div>
+
+    <div class="qcard" id="q4"><div class="qlabel">Step 4 of 6</div><h2>What market are you building for?</h2><div class="qhint">Determines currencies, ID formats, regulatory context, and naming conventions.</div>
+      <div class="opts" data-q="region">
+        <div class="opt" data-v="eu"><div class="ck"></div><div><div class="olabel">European Union</div><div class="odesc">SEPA transfers, IBAN, EUR, GDPR &amp; PSD2 compliant patterns</div></div></div>
+        <div class="opt" data-v="baltics"><div class="ck"></div><div><div class="olabel">Baltics (Latvia, Lithuania, Estonia)</div><div class="odesc">Baltic banking patterns, local IDs, EUR-denominated</div></div></div>
+        <div class="opt" data-v="uk"><div class="ck"></div><div><div class="olabel">United Kingdom</div><div class="odesc">UK sort codes, GBP, FCA-regulated context</div></div></div>
+        <div class="opt" data-v="us"><div class="ck"></div><div><div class="olabel">United States</div><div class="odesc">ACH/wire, USD, SSN-masked, state-level patterns</div></div></div>
+        <div class="opt" data-v="global"><div class="ck"></div><div><div class="olabel">Global / multi-region</div><div class="odesc">Mixed currencies, SWIFT codes, cross-border patterns</div></div></div>
+      </div><div class="qnav"><button class="btn2" onclick="goBack(4)">&larr; Back</button><button class="btn btnsm" id="next4" onclick="goNext(4)" disabled>Continue &rarr;</button></div></div>
+
+    <div class="qcard" id="q5"><div class="qlabel">Step 5 of 6</div><h2>What patterns matter most?</h2><div class="qhint">Select all that apply. This shapes statistical distributions in your data.</div>
+      <div class="opts" data-q="patterns" data-multi="true">
+        <div class="opt multi" data-v="anomalies"><div class="ck"></div><div><div class="olabel">Fraud / anomaly patterns</div><div class="odesc">Realistic attack vectors — velocity abuse, card testing, account takeover</div></div></div>
+        <div class="opt multi" data-v="temporal"><div class="ck"></div><div><div class="olabel">Temporal &amp; seasonal trends</div><div class="odesc">Time-of-day spikes, holiday patterns, monthly cycles</div></div></div>
+        <div class="opt multi" data-v="geographic"><div class="ck"></div><div><div class="olabel">Geographic distribution</div><div class="odesc">Cross-border flows, country-specific transaction volumes</div></div></div>
+        <div class="opt multi" data-v="edge_cases"><div class="ck"></div><div><div class="olabel">Rare events &amp; edge cases</div><div class="odesc">High-value outliers, unusual behavior, thin-file customers</div></div></div>
+        <div class="opt multi" data-v="fairness"><div class="ck"></div><div><div class="olabel">Demographic balance &amp; fairness</div><div class="odesc">Balanced representation across age, gender, income brackets</div></div></div>
+      </div><div class="qnav"><button class="btn2" onclick="goBack(5)">&larr; Back</button><button class="btn btnsm" id="next5" onclick="goNext(5)" disabled>Continue &rarr;</button></div></div>
+
+    <div class="qcard" id="q6"><div class="qlabel">Step 6 of 6</div><h2>How many records do you need?</h2><div class="qhint">Larger datasets train better models. We can always generate more later.</div>
+      <div class="opts" data-q="scale">
+        <div class="opt" data-v="1k"><div class="ck"></div><div><div class="olabel">1,000 – 10,000 records</div><div class="odesc">Quick prototype — validate schema and approach</div></div></div>
+        <div class="opt" data-v="10k"><div class="ck"></div><div><div class="olabel">10,000 – 100,000 records</div><div class="odesc">MVP-grade — meaningful model evaluation</div></div></div>
+        <div class="opt" data-v="100k"><div class="ck"></div><div><div class="olabel">100,000 – 1,000,000 records</div><div class="odesc">Production training — statistically robust</div></div></div>
+        <div class="opt" data-v="1m"><div class="ck"></div><div><div class="olabel">1,000,000+ records</div><div class="odesc">Enterprise scale — deep edge case coverage</div></div></div>
+      </div><div class="qnav"><button class="btn2" onclick="goBack(6)">&larr; Back</button><button class="btn btnsm" id="next6" onclick="showSummary()" disabled>See AI Configuration &rarr;</button></div></div>
+
+    <div class="summary-card" id="summary">
+      <div class="summary-top"><div class="ai-badge"><div class="pulse"></div> AI-configured</div><h2>Your dataset configuration</h2><p>Based on your answers, here's what we recommend — and why.</p></div>
+      <div class="config-grid" id="config-grid"></div>
+      <div class="cols-section"><div class="ci-label">Columns included <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.72rem;"> — click to toggle</span></div><div class="col-chips" id="col-chips"></div></div>
+      <div class="ai-adjust"><input type="text" id="ai-input" placeholder="Ask AI to adjust — e.g. &quot;increase fraud rate to 5%&quot; or &quot;add device fingerprints&quot;"><button onclick="handleAiAdjust()">Adjust</button></div>
+      <div class="ai-response" id="ai-resp"><div class="ai-bubble" id="ai-bubble"></div></div>
+      <div class="preview-section"><div class="ci-label">Preview — 5 sample rows</div><div class="preview-table-wrap"><table class="prev-table" id="prev-table"></table></div></div>
+      <div class="summary-actions"><button class="btn2" onclick="goBackFromSummary()">← Back to questions</button><button class="btn" style="margin:0;" onclick="startGen()">Generate Dataset &rarr;</button></div>
+    </div>
+
+    <div class="gen-overlay" id="gen-overlay"><div class="spinner"></div><p>Generating on RTU RUDENS HPC...</p><div class="gen-step" id="gen-step">Allocating GPU nodes...</div></div>
+
+    <div class="final-result" id="final-result">
+      <div class="final-top"><div class="final-icon">&#x2714;</div><h2>Your dataset is ready</h2><p>Generated on RTU RUDENS HPC cluster in under 2 minutes.</p></div>
+      <div class="final-meta" id="final-meta"></div>
+      <div class="final-preview"><div class="ci-label">Dataset preview</div><div class="preview-table-wrap"><table class="prev-table" id="final-table"></table></div></div>
+      <div class="final-actions"><button class="btn2" onclick="resetDemo()">Start Over</button><button class="btn" style="margin:0;" onclick="alert('In production: downloads your generated file')">Download Dataset &rarr;</button></div>
+    </div>
+  </div>
+</div>
+
+<footer>datco — pitch demo &middot; april 2026</footer>
+
+<script>
+function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById('page-'+(p==='landing'?'landing':'demo')).classList.add('active');document.querySelectorAll('.nav-tab').forEach(a=>a.classList.remove('active'));document.getElementById(p==='landing'?'nav-pitch':'nav-demo').classList.add('active');window.scrollTo(0,0);if(p==='demo')resetDemo();}
+const A={},TOTAL_Q=6;
+function renderStepper(cur){const s=document.getElementById('stepper');let h='';for(let i=1;i<=TOTAL_Q;i++){h+=`<div class="stepper-dot ${i<cur?'done':i===cur?'current':''}"></div>`;if(i<TOTAL_Q)h+=`<div class="stepper-line ${i<cur?'done':''}"></div>`;}s.innerHTML=h;}
+document.querySelectorAll('.opts').forEach(group=>{const isMulti=group.dataset.multi==='true';group.querySelectorAll('.opt').forEach(opt=>{opt.addEventListener('click',()=>{if(isMulti){opt.classList.toggle('sel');const vals=[];group.querySelectorAll('.opt.sel').forEach(o=>vals.push(o.dataset.v));A[group.dataset.q]=vals;}else{group.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));opt.classList.add('sel');A[group.dataset.q]=opt.dataset.v;}const btn=opt.closest('.qcard').querySelector('.btn');if(btn){if(isMulti)btn.disabled=!group.querySelector('.opt.sel');else btn.disabled=false;}});});});
+function goNext(n){document.getElementById('q'+n).classList.remove('active');document.getElementById('q'+(n+1)).classList.add('active');renderStepper(n+1);}
+function goBack(n){document.getElementById('q'+n).classList.remove('active');document.getElementById('q'+(n-1)).classList.add('active');renderStepper(n-1);}
+function goBackFromSummary(){document.getElementById('summary').classList.remove('active');document.getElementById('q6').classList.add('active');renderStepper(6);}
+
+const PM={fraud_detection:{label:'Fraud Detection',ar:'2.1%',aw:'Industry average card fraud rate is ~2%',fmt:'CSV'},credit_scoring:{label:'Credit Scoring',ar:'8.5%',aw:'Average default rate for unsecured consumer loans',fmt:'CSV'},aml:{label:'AML Monitoring',ar:'0.3%',aw:'Typical SAR filing rate across banking transactions',fmt:'JSON'},payments:{label:'Payment Processing',ar:'1.2%',aw:'Average chargeback + decline rate in card processing',fmt:'CSV'},insurance:{label:'Insurance Underwriting',ar:'5.0%',aw:'Estimated fraudulent claims rate in EU insurance',fmt:'CSV'}};
+const SM={research:{label:'Research / POC',rec:'5,000'},mvp:{label:'MVP / Testing',rec:'50,000'},production:{label:'Production Training',rec:'500,000'},scaling:{label:'Scaling',rec:'2,000,000'}};
+const RM={eu:{label:'European Union',cur:'EUR',id:'IBAN'},baltics:{label:'Baltics',cur:'EUR',id:'IBAN (LV/LT/EE)'},uk:{label:'United Kingdom',cur:'GBP',id:'Sort Code + Account'},us:{label:'United States',cur:'USD',id:'ACH Routing'},global:{label:'Global',cur:'Multi (EUR, USD, GBP)',id:'SWIFT/BIC'}};
+const SC={'1k':'5,000','10k':'50,000','100k':'500,000','1m':'2,000,000'};
+const DC={transactions:['tx_id','timestamp','amount','currency','sender_id','receiver_id','tx_type','channel','is_fraud','risk_score'],profiles:['customer_id','full_name','date_of_birth','country','id_type','id_number','phone_hash','kyc_status','account_opened','risk_tier'],credit:['application_id','customer_id','loan_amount','term_months','interest_rate','income','debt_to_income','credit_score','status','default'],linked:['tx_id','timestamp','amount','currency','customer_id','customer_country','account_age_days','tx_type','is_fraud','risk_score']};
+
+let CC={};
+function buildConfig(){const pm=PM[A.product]||PM.fraud_detection;const rm=RM[A.region]||RM.eu;const cols=[...(DC[A.datatype]||DC.transactions)];const pats=A.patterns||[];if(pats.includes('temporal')&&!cols.includes('hour_of_day'))cols.push('hour_of_day');if(pats.includes('geographic')&&!cols.includes('sender_country'))cols.push('sender_country','receiver_country');if(pats.includes('fairness')&&!cols.includes('age_bracket'))cols.push('age_bracket','gender');CC={product:pm.label,ar:pm.ar,aw:pm.aw,fmt:pm.fmt,region:rm.label,cur:rm.cur,idFmt:rm.id,records:SC[A.scale]||'50,000',columns:cols,patterns:pats};}
+
+function showSummary(){document.getElementById('q6').classList.remove('active');buildConfig();renderSummary();document.getElementById('summary').classList.add('active');renderStepper(7);}
+
+function renderSummary(){const c=CC;document.getElementById('config-grid').innerHTML=`
+<div class="config-item"><div class="ci-label">Product type</div><div class="ci-value">${c.product}</div></div>
+<div class="config-item"><div class="ci-label">Records</div><div class="ci-value">${c.records}</div><div class="ci-why">Optimized for ${SM[A.stage]?.label||'your'} stage</div></div>
+<div class="config-item"><div class="ci-label">Anomaly / target rate</div><div class="ci-value">${c.ar}</div><div class="ci-why">${c.aw}</div></div>
+<div class="config-item"><div class="ci-label">Region &amp; currency</div><div class="ci-value">${c.region} · ${c.cur}</div><div class="ci-why">ID format: ${c.idFmt}</div></div>
+<div class="config-item"><div class="ci-label">Output format</div><div class="ci-value">${c.fmt}</div></div>
+<div class="config-item"><div class="ci-label">Special patterns</div><div class="ci-value">${(c.patterns||[]).length>0?c.patterns.map(p=>p.replace('_',' ')).join(', '):'None selected'}</div></div>`;
+const chips=document.getElementById('col-chips');chips.innerHTML=c.columns.map(col=>`<span class="col-chip on" data-col="${col}">${col}</span>`).join('');
+['merchant_category','device_fingerprint','ip_country','session_duration','velocity_1h','velocity_24h'].forEach(col=>{if(!c.columns.includes(col))chips.innerHTML+=`<span class="col-chip" data-col="${col}">${col}</span>`;});
+chips.querySelectorAll('.col-chip').forEach(chip=>{chip.addEventListener('click',()=>{chip.classList.toggle('on');updatePreview();});});
+updatePreview();}
+
+function getActiveCols(){return Array.from(document.querySelectorAll('#col-chips .col-chip.on')).map(c=>c.dataset.col);}
+
+const S={tx_id:['TXN-000001','TXN-000002','TXN-000003','TXN-000004','TXN-000005'],timestamp:['2026-04-01 09:12:33','2026-04-01 09:14:01','2026-04-01 09:14:47','2026-04-01 09:15:22','2026-04-01 09:16:05'],amount:['142.50','3,847.00','23.99','899.00','12,450.00'],currency:['EUR','EUR','EUR','EUR','EUR'],sender_id:['USR_8291','USR_1052','USR_4471','USR_7382','USR_0093'],receiver_id:['MER_3847','USR_9983','MER_0221','USR_6610','USR_4412'],tx_type:['purchase','transfer','purchase','purchase','transfer'],channel:['mobile_app','web','pos_terminal','mobile_app','web'],is_fraud:['0','1','0','0','1'],risk_score:['0.08','0.92','0.03','0.11','0.97'],customer_id:['CUS_29481','CUS_10283','CUS_77392','CUS_44810','CUS_33291'],full_name:['Anna M.','Jānis K.','Marta S.','Erik T.','Olga P.'],date_of_birth:['1989-03-15','1975-11-22','1992-07-08','1988-01-30','1995-06-14'],country:['LV','LV','LT','EE','LV'],id_type:['passport','id_card','passport','id_card','driver_license'],id_number:['LV***4821','LV***9033','LT***2187','EE***5543','LV***7710'],phone_hash:['a3f2...','b8c1...','d4e7...','f1a9...','c2b6...'],kyc_status:['verified','verified','pending','verified','verified'],account_opened:['2022-01-15','2019-08-03','2025-11-20','2021-03-10','2023-06-28'],risk_tier:['low','medium','high','low','medium'],application_id:['APP_001','APP_002','APP_003','APP_004','APP_005'],loan_amount:['5,000','15,000','2,500','25,000','8,000'],term_months:['24','60','12','84','36'],interest_rate:['5.9%','7.2%','12.1%','4.8%','8.5%'],income:['38,400','52,100','18,900','74,000','31,200'],debt_to_income:['0.23','0.31','0.67','0.12','0.45'],credit_score:['742','695','490','820','581'],status:['approved','approved','declined','approved','approved'],default:['no','no','—','no','yes'],account_age_days:['1538','2433','157','1848','1033'],customer_country:['LV','LV','LT','EE','LV'],hour_of_day:['9','9','9','9','9'],sender_country:['LV','LV','LT','EE','LV'],receiver_country:['LV','DE','LT','EE','CY'],age_bracket:['35-44','45-54','25-34','35-44','25-34'],gender:['F','M','F','M','F'],merchant_category:['retail','—','grocery','electronics','—'],device_fingerprint:['fp_a82f','fp_c910','fp_d3b1','fp_a82f','fp_c910'],ip_country:['LV','LV','LT','EE','RU'],session_duration:['342','28','567','189','15'],velocity_1h:['2','14','1','3','23'],velocity_24h:['5','47','3','8','89']};
+
+function renderPT(tid,cols){const t=document.getElementById(tid);let h='<thead><tr>';cols.forEach(c=>h+=`<th>${c}</th>`);h+='</tr></thead><tbody>';for(let i=0;i<5;i++){h+='<tr>';cols.forEach(c=>{let v=S[c]?S[c][i]:'—';if(c==='is_fraud'&&v==='1')v='<span class="fraud-yes">⚑ 1</span>';else if(c==='is_fraud'&&v==='0')v='<span class="fraud-no">0</span>';else if(c==='risk_score'&&parseFloat(v)>0.8)v='<span class="fraud-yes">'+v+'</span>';else if(c==='default'&&v==='yes')v='<span class="fraud-yes">yes</span>';h+=`<td>${v}</td>`;});h+='</tr>';}h+='</tbody>';t.innerHTML=h;}
+function updatePreview(){renderPT('prev-table',getActiveCols());}
+
+const AIR={fraud:{msg:'Done — increased the fraud/anomaly rate and added fraud-pattern columns.',act:()=>{CC.ar='5.0%';renderSummary();}},rate:{msg:'Adjusted the anomaly rate. Preview updated.',act:()=>{CC.ar='5.0%';renderSummary();}},device:{msg:'Added device_fingerprint and ip_country — useful for device-level fraud signals.',act:()=>{document.querySelectorAll('#col-chips .col-chip').forEach(c=>{if(c.dataset.col==='device_fingerprint'||c.dataset.col==='ip_country')c.classList.add('on');});updatePreview();}},velocity:{msg:'Added velocity_1h and velocity_24h — captures transaction frequency patterns key for fraud models.',act:()=>{document.querySelectorAll('#col-chips .col-chip').forEach(c=>{if(c.dataset.col==='velocity_1h'||c.dataset.col==='velocity_24h')c.classList.add('on');});updatePreview();}},json:{msg:'Switched to JSON. Great for API-first architectures.',act:()=>{CC.fmt='JSON';renderSummary();}},parquet:{msg:'Switched to Parquet — optimal for ML pipelines with columnar storage.',act:()=>{CC.fmt='Parquet';renderSummary();}},more:{msg:'Doubled the record count. More data = better rare pattern coverage.',act:()=>{CC.records=(parseInt(CC.records.replace(/,/g,''))*2).toLocaleString();renderSummary();}},session:{msg:'Added session_duration — captures behavioral patterns around transaction timing.',act:()=>{document.querySelectorAll('#col-chips .col-chip').forEach(c=>{if(c.dataset.col==='session_duration')c.classList.add('on');});updatePreview();}}};
+
+function handleAiAdjust(){const input=document.getElementById('ai-input');const text=input.value.toLowerCase().trim();if(!text)return;let m=null;for(const[k,r]of Object.entries(AIR)){if(text.includes(k)){m=r;break;}}if(!m)m={msg:`Understood — adjusted configuration based on "${input.value}". Preview updated.`,act:()=>{}};m.act();document.getElementById('ai-bubble').textContent=m.msg;document.getElementById('ai-resp').classList.add('show');input.value='';setTimeout(()=>document.getElementById('ai-resp').classList.remove('show'),4000);}
+document.getElementById('ai-input').addEventListener('keydown',e=>{if(e.key==='Enter')handleAiAdjust();});
+
+function startGen(){document.getElementById('summary').classList.remove('active');const gen=document.getElementById('gen-overlay');gen.classList.add('active');const steps=['Loading statistical model...','Generating records...','Validating distributions...'];let i=0;const el=document.getElementById('gen-step');const iv=setInterval(()=>{i++;if(i<steps.length)el.textContent=steps[i];else{clearInterval(iv);gen.classList.remove('active');showFinal();}},500);}
+
+function showFinal(){const r=document.getElementById('final-result');r.classList.add('active');document.getElementById('final-meta').innerHTML=`<div class="fm-item"><div class="fm-val">${CC.records}</div><div class="fm-label">records generated</div></div><div class="fm-item"><div class="fm-val">${getActiveCols().length}</div><div class="fm-label">columns</div></div><div class="fm-item"><div class="fm-val">${CC.fmt}</div><div class="fm-label">format</div></div>`;renderPT('final-table',getActiveCols());}
+
+function resetDemo(){Object.keys(A).forEach(k=>delete A[k]);['summary','gen-overlay','final-result'].forEach(id=>document.getElementById(id).classList.remove('active'));document.querySelectorAll('.qcard').forEach(q=>q.classList.remove('active'));document.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));document.querySelectorAll('.btn[id^="next"]').forEach(b=>b.disabled=true);document.getElementById('ai-resp').classList.remove('show');document.getElementById('q1').classList.add('active');renderStepper(1);}
+renderStepper(1);
+</script>
+</body>
+</html>
