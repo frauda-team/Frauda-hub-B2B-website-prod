@@ -286,7 +286,7 @@ function MailList({ arrived, flagged, quarantined }) {
   )
 }
 
-function Highlight({ children, tag, on }) {
+function Highlight({ children, on }) {
   return (
     <span style={{
       background: on ? 'var(--danger-soft)' : 'transparent',
@@ -295,16 +295,8 @@ function Highlight({ children, tag, on }) {
       padding: on ? '2px 4px' : 0,
       borderRadius: 3,
       transition: 'background .3s, color .3s',
-      position: 'relative', display: 'inline-block',
     }}>
       {children}
-      {on && tag && (
-        <span style={{
-          position: 'absolute', top: '100%', left: 0, marginTop: 5,
-          fontSize: 10, fontFamily: 'var(--font-mono)',
-          color: 'var(--danger)', whiteSpace: 'nowrap', opacity: 0.85,
-        }}>↳ {tag}</span>
-      )}
     </span>
   )
 }
@@ -332,7 +324,7 @@ function MailReader({ arrived, flagged, verdict, quarantined }) {
               <div style={{ fontSize: 13.5 }}>
                 <div>
                   <strong>Microsoft Billing</strong>{' '}
-                  &lt;<Highlight tag="lookalike domain" on={flagged}>billing@micros0ft-secure.com</Highlight>&gt;
+                  &lt;<Highlight on={flagged}>billing@micros0ft-secure.com</Highlight>&gt;
                 </div>
                 <div style={{ color: 'var(--fg-muted)', marginTop: 3 }}>to: m.berzins@acme.lv · Today 09:23</div>
               </div>
@@ -344,11 +336,11 @@ function MailReader({ arrived, flagged, verdict, quarantined }) {
             <p style={{ margin: 0 }}>Dear customer,</p>
             <p style={{ marginTop: 16 }}>
               We have detected{' '}
-              <Highlight tag="urgency trigger" on={flagged}>unusual activity</Highlight>{' '}
+              <Highlight on={flagged}>unusual activity</Highlight>{' '}
               on your Microsoft 365 account. To avoid permanent suspension, please{' '}
-              <Highlight tag="credential harvest" on={flagged}>verify your credentials</Highlight>{' '}
+              <Highlight on={flagged}>verify your credentials</Highlight>{' '}
               by clicking the secure portal link below{' '}
-              <Highlight tag="urgency trigger" on={flagged}>within 24 hours</Highlight>.
+              <Highlight on={flagged}>within 24 hours</Highlight>.
             </p>
             <p style={{ marginTop: 28 }}>
               <span style={{

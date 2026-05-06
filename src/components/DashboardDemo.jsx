@@ -55,7 +55,7 @@ export default function DashboardDemo() {
     }}>
       {/* app shell */}
       <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', flex: 1, minHeight: 0 }}>
-        <Sidebar />
+        <Sidebar scene={scene} />
         <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
           <Topbar scene={scene} />
           <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
@@ -139,11 +139,14 @@ function RestartIcon() {
   return <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
 }
 
-function Sidebar() {
+const SCENE_NAV = { 0: 'Overview', 1: 'Live feed', 2: 'Live feed', 3: 'Employees' }
+
+function Sidebar({ scene }) {
+  const activeItem = SCENE_NAV[scene] ?? 'Overview'
   const items = [
-    ['Overview', Icon.Eye, true], ['Live feed', Icon.Bolt, false],
-    ['Employees', Icon.Chip, false], ['Policies', Icon.Shield, false],
-    ['Investigations', Icon.Search, false],
+    ['Overview', Icon.Eye], ['Live feed', Icon.Bolt],
+    ['Employees', Icon.Chip], ['Policies', Icon.Shield],
+    ['Investigations', Icon.Search],
   ]
   return (
     <aside style={{ borderRight: '1px solid var(--border)', background: 'var(--bg-elev)', display: 'flex', flexDirection: 'column' }}>
@@ -160,17 +163,21 @@ function Sidebar() {
         </div>
       </div>
       <nav style={{ padding: 8, flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-        {items.map(([name, Ic, sel]) => (
-          <div key={name} style={{
-            padding: '8px 10px', borderRadius: 7, fontSize: 13,
-            display: 'flex', alignItems: 'center', gap: 9, cursor: 'default',
-            background: sel ? 'var(--accent-soft)' : 'transparent',
-            color: sel ? 'var(--accent)' : 'var(--fg-muted)',
-            fontWeight: sel ? 600 : 400,
-          }}>
-            <Ic size={14} /> {name}
-          </div>
-        ))}
+        {items.map(([name, Ic]) => {
+          const sel = name === activeItem
+          return (
+            <div key={name} style={{
+              padding: '8px 10px', borderRadius: 7, fontSize: 13,
+              display: 'flex', alignItems: 'center', gap: 9, cursor: 'default',
+              background: sel ? 'var(--accent-soft)' : 'transparent',
+              color: sel ? 'var(--accent)' : 'var(--fg-muted)',
+              fontWeight: sel ? 600 : 400,
+              transition: 'background 0.4s, color 0.4s',
+            }}>
+              <Ic size={14} /> {name}
+            </div>
+          )
+        })}
       </nav>
       <div style={{ padding: 12, borderTop: '1px solid var(--border)', fontSize: 11.5, color: 'var(--fg-muted)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 5 }}>
