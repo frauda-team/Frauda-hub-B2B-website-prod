@@ -1,0 +1,168 @@
+/* Frauda Hub — design system tokens */
+:root {
+  --bg: #f7f8fa;
+  --bg-elev: #ffffff;
+  --bg-soft: #eef0f4;
+  --fg: #0c1a30;
+  --fg-muted: #4a5772;
+  --fg-faint: #8993a8;
+  --border: rgba(26, 60, 113, 0.10);
+  --border-strong: rgba(26, 60, 113, 0.20);
+  --accent: #1a3c71;
+  --accent-2: #3271d7;
+  --accent-soft: #e7eef9;
+  --accent-fg: #ffffff;
+  --accent-grad: linear-gradient(180deg, #3271d7 0%, #1a3c71 100%);
+  --danger: #c2412e;
+  --danger-soft: #fbe7e2;
+  --warn: #b07a1c;
+  --warn-soft: #f6e9cf;
+  --ok: #1a3c71;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+
+  --shadow-card: 0 1px 0 rgba(14,16,20,0.04), 0 1px 2px rgba(14,16,20,0.04);
+  --shadow-pop: 0 12px 32px -12px rgba(14,16,20,0.18), 0 2px 6px rgba(14,16,20,0.06);
+
+  --font-sans: 'Bricolage Grotesque', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+[data-theme="dark"] {
+  --bg: #07101f;
+  --bg-elev: #0e1c34;
+  --bg-soft: #122444;
+  --fg: #eaf0fb;
+  --fg-muted: #9aa9c5;
+  --fg-faint: #6a78a0;
+  --border: rgba(140, 175, 230, 0.12);
+  --border-strong: rgba(140, 175, 230, 0.22);
+  --accent: #5b97ed;
+  --accent-2: #3271d7;
+  --accent-soft: rgba(91, 151, 237, 0.14);
+  --accent-fg: #07101f;
+  --accent-grad: linear-gradient(180deg, #5b97ed 0%, #1a3c71 100%);
+  --danger: #ff8b78;
+  --danger-soft: rgba(255, 139, 120, 0.14);
+  --warn: #f0c46a;
+  --warn-soft: rgba(240, 196, 106, 0.14);
+  --ok: #5b97ed;
+  --shadow-card: 0 1px 0 rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-pop: 0 12px 32px -12px rgba(0,0,0,0.6), 0 2px 6px rgba(0,0,0,0.3);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background 0.2s, color 0.2s;
+}
+
+a { color: inherit; }
+
+/* ── utility classes ──────────────────────────────────── */
+.mono { font-family: var(--font-mono); }
+.serif { font-family: var(--font-display); }
+
+/* ── buttons ─────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 14px/1 var(--font-sans);
+  padding: 11px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.12s, background 0.12s, border-color 0.12s, color 0.12s, filter 0.12s;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--accent); color: var(--accent-fg); }
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-ghost { background: transparent; color: var(--fg); border-color: var(--border-strong); }
+.btn-ghost:hover { background: var(--bg-soft); }
+.btn-sm { padding: 7px 12px; font-size: 13px; }
+
+/* ── chips ───────────────────────────────────────────── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--bg-soft);
+  color: var(--fg-muted);
+  font: 500 12px/1 var(--font-sans);
+  border: 1px solid var(--border);
+}
+.chip-accent { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.chip-danger { background: var(--danger-soft); color: var(--danger); border-color: transparent; }
+.chip-warn   { background: var(--warn-soft);   color: var(--warn);   border-color: transparent; }
+.chip-ok     { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+
+/* ── cards ───────────────────────────────────────────── */
+.card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-card);
+}
+
+/* ── headings ────────────────────────────────────────── */
+.h-display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 0.96;
+}
+.h-display em, .serif em {
+  font-style: italic;
+  font-weight: 500;
+}
+.h-eyebrow {
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+/* ── divider ─────────────────────────────────────────── */
+.div-h { height: 1px; background: var(--border); width: 100%; }
+
+/* hide scrollbars inside scroll regions */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ── keyframes ───────────────────────────────────────── */
+@keyframes fh-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.04); }
+}
+@keyframes fh-scan {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+@keyframes fh-flag {
+  0%   { opacity: 0; transform: translateY(4px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes fh-fadein {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fh-slidein {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
