@@ -31,13 +31,8 @@ function Hero() {
       <div className="inner" style={{ position: 'relative' }}>
         <div className="hero-badge" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32, flexWrap: 'wrap' }}>
           <FraudaMark size={66} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <div className="chip chip-accent" style={{ alignSelf: 'flex-start' }}>
-              <StatusDot tone="ok" /> Private beta · EU only
-            </div>
-            <div style={{ fontSize: 13, color: 'var(--fg-faint)', fontFamily: 'var(--font-mono)' }}>
-              Portfolio: Fishpo · Datco
-            </div>
+          <div className="chip chip-accent">
+            <StatusDot tone="ok" /> Private beta · EU only
           </div>
         </div>
 
@@ -195,16 +190,31 @@ function Team() {
             </div>
           </div>
           <div style={{
-            height: 320, borderRadius: 'var(--r-lg)', overflow: 'hidden',
+            minHeight: 320, borderRadius: 'var(--r-lg)', overflow: 'hidden',
             background: 'var(--accent-grad)', position: 'relative',
-            display: 'grid', placeItems: 'center',
+            padding: '44px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
           }}>
             <div aria-hidden="true" style={{
-              position: 'absolute', inset: 0, opacity: 0.18,
+              position: 'absolute', inset: 0, opacity: 0.14,
               backgroundImage: 'linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)',
               backgroundSize: '32px 32px',
             }} />
-            <FraudaMark size={140} />
+            <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px 24px' }}>
+              {[
+                ['2024', 'Founded in Riga'],
+                ['2', 'Portfolio companies'],
+                ['3', 'Research institutions'],
+                ['EU', 'Innovation backed'],
+              ].map(([n, l]) => (
+                <div key={l}>
+                  <div style={{
+                    fontFamily: 'var(--font-display)', fontSize: 40, fontWeight: 700,
+                    color: '#fff', lineHeight: 1, letterSpacing: '-0.03em',
+                  }}>{n}</div>
+                  <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', marginTop: 6 }}>{l}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

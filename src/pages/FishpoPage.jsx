@@ -42,8 +42,6 @@ function Hero({ onOpenDemo }) {
 
       <div className="inner" style={{ position: 'relative' }}>
         <div className="hero-badge" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32, flexWrap: 'wrap' }}>
-          <span className="product-badge">Fishpo</span>
-          <span style={{ color: 'var(--border-strong)', fontSize: 14 }}>·</span>
           <Link to="/hub" className="hub-chip">
             <FraudaMark size={14} />
             A Frauda Hub company
@@ -74,7 +72,7 @@ function Hero({ onOpenDemo }) {
 
         <div className="hero-cta" style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap' }}>
           <button className="btn btn-primary btn-xl" onClick={onOpenDemo}>
-            <Icon.Play size={14} /> See it in action
+            <Icon.Play size={14} /> Watch the demo
           </button>
           <button className="btn btn-ghost btn-xl">
             Join the pilot <Icon.Arrow size={16} />
@@ -126,23 +124,27 @@ function DemoCTA({ onOpenDemo, onOpenDashboard }) {
       <div className="inner">
         <div className="card" style={{
           padding: '48px 52px',
-          display: 'grid', gridTemplateColumns: '1fr auto', gap: 32, alignItems: 'center',
+          display: 'grid', gridTemplateColumns: '1fr auto', gap: 40, alignItems: 'center',
         }}>
           <div>
-            <div className="h-eyebrow" style={{ marginBottom: 14 }}>Live demo</div>
+            <div className="h-eyebrow" style={{ marginBottom: 14 }}>Product videos</div>
             <div className="h-display" style={{ fontSize: 'clamp(28px, 3vw, 40px)', maxWidth: 560 }}>
-              Watch a phishing email get caught inside Outlook — in 8 seconds.
+              See Fishpo stop a phishing attack — and run the admin console.
             </div>
             <div style={{ fontSize: 15, color: 'var(--fg-muted)', marginTop: 14, maxWidth: 480, lineHeight: 1.6 }}>
-              Runs in your browser — no install, no signup.
+              Two video walkthroughs: the end-user experience and the security team's console. No install or signup.
             </div>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, flexShrink: 0 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flexShrink: 0 }}>
             <button className="btn btn-primary" onClick={onOpenDemo}>
-              <Icon.Play size={12} /> Open interactive demo
+              <Icon.Play size={12} /> Watch detection video
             </button>
-            <button className="btn btn-ghost btn-sm" onClick={onOpenDashboard}>
-              View admin dashboard <Icon.Arrow size={13} />
+            <button className="btn btn-primary" onClick={onOpenDashboard}
+              style={{ background: 'transparent', color: 'var(--accent)', border: '1.5px solid var(--accent)' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'var(--accent-soft)' }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
+            >
+              <Icon.Play size={12} /> Watch console video
             </button>
           </div>
         </div>

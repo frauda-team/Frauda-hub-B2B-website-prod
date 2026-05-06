@@ -28,8 +28,6 @@ function Hero() {
 
       <div className="inner" style={{ position: 'relative' }}>
         <div className="hero-badge" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32, flexWrap: 'wrap' }}>
-          <span className="product-badge">Datco</span>
-          <span style={{ color: 'var(--border-strong)', fontSize: 14 }}>·</span>
           <Link to="/hub" className="hub-chip">
             <FraudaMark size={14} />
             A Frauda Hub company
