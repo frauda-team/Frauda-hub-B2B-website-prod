@@ -6,27 +6,42 @@ const SCRIPT = [
   { t: 1.2,  label: 'New email arrives' },
   { t: 2.6,  label: 'Fishpo scanning…' },
   { t: 4.2,  label: 'Tokens flagged' },
-  { t: 5.4,  label: 'Verdict: phishing' },
+  { t: 5.4,  label: 'Verdict: Phishing' },
   { t: 6.6,  label: 'User alerted' },
-  { t: 8.0,  label: 'Quarantined' },
+  { t: 8.0,  label: 'Email quarantined' },
 ]
 const DURATION = 9.5
+
+function currentLabel(t) {
+  return SCRIPT.filter(s => t >= s.t).slice(-1)[0]?.label ?? ''
+}
 
 export default function FishpoDemo() {
   const [t, setT] = React.useState(0)
   const [playing, setPlaying] = React.useState(true)
-  const raf = React.useRef(0)
-  const last = React.useRef(performance.now())
+  const raf = React.useRef(null)
+  const last = React.useRef(null)
 
   React.useEffect(() => {
     function tick(now) {
+      if (last.current === null) last.current = now
       const dt = (now - last.current) / 1000
       last.current = now
-      if (playing) setT(prev => (prev + dt) % DURATION)
+      setT(prev => {
+        const next = prev + dt
+        return next >= DURATION ? 0 : next
+      })
       raf.current = requestAnimationFrame(tick)
     }
-    raf.current = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf.current)
+
+    if (playing) {
+      last.current = null
+      raf.current = requestAnimationFrame(tick)
+    }
+
+    return () => {
+      if (raf.current) cancelAnimationFrame(raf.current)
+    }
   }, [playing])
 
   const arrived     = t > 1.2
@@ -36,12 +51,29 @@ export default function FishpoDemo() {
   const alerted     = t > 6.6
   const quarantined = t > 8.0
 
+  const pct = (t / DURATION) * 100
+
+  function handleScrub(e) {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
+    setT(ratio * DURATION)
+    setPlaying(false)
+  }
+
+  function restart() {
+    setT(0)
+    setPlaying(true)
+  }
+
   return (
-    <div style={{ width: '100%', height: '100%', background: 'var(--bg-soft)', display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-sans)' }}>
-      {/* browser chrome */}
+    <div style={{
+      width: '100%', height: '100%', background: 'var(--bg-soft)',
+      display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-sans)',
+    }}>
+      {/* browser chrome bar */}
       <div style={{
         padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 14,
-        borderBottom: '1px solid var(--border)', background: 'var(--bg-elev)',
+        borderBottom: '1px solid var(--border)', background: 'var(--bg-elev)', flexShrink: 0,
       }}>
         <div style={{ display: 'flex', gap: 6 }}>
           <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#ed6a5e' }} />
@@ -70,38 +102,127 @@ export default function FishpoDemo() {
         />
       </div>
 
-      {/* scrubber */}
+      {/* ── Player bar ─────────────────────────────────────── */}
       <div style={{
-        padding: '10px 16px', borderTop: '1px solid var(--border)',
-        background: 'var(--bg-elev)', display: 'flex', alignItems: 'center', gap: 14,
-        fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-muted)',
+        padding: '12px 16px',
+        borderTop: '1px solid var(--border)',
+        background: 'var(--bg-elev)',
+        display: 'flex', flexDirection: 'column', gap: 8,
+        flexShrink: 0,
       }}>
-        <button onClick={() => setPlaying(p => !p)} className="btn btn-ghost btn-sm" style={{ padding: '5px 10px' }}>
-          {playing ? '❚❚' : <Icon.Play size={10} />}
-        </button>
-        <div style={{ position: 'relative', flex: 1, height: 4, background: 'var(--bg-soft)', borderRadius: 2 }}>
-          <div style={{
-            position: 'absolute', left: 0, top: 0, height: '100%',
-            width: `${(t / DURATION) * 100}%`,
-            background: 'var(--accent)', borderRadius: 2, transition: 'width .08s linear',
-          }} />
-          {SCRIPT.map((s, i) => (
-            <button key={i}
-              onClick={() => { setT(s.t); setPlaying(false) }}
-              title={s.label}
-              style={{
-                position: 'absolute', left: `${(s.t / DURATION) * 100}%`,
-                top: -4, width: 10, height: 10, borderRadius: '50%',
-                background: 'var(--bg-elev)', border: '1.5px solid var(--accent)',
-                transform: 'translateX(-50%)', cursor: 'pointer', padding: 0,
-              }} />
-          ))}
+        {/* top row: controls + time */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {/* play / pause */}
+          <button
+            onClick={() => setPlaying(p => !p)}
+            aria-label={playing ? 'Pause' : 'Play'}
+            style={{
+              width: 32, height: 32, borderRadius: '50%',
+              background: 'var(--accent)', color: 'var(--accent-fg)',
+              border: 'none', cursor: 'pointer',
+              display: 'grid', placeItems: 'center',
+              flexShrink: 0,
+              transition: 'filter .12s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.filter = 'brightness(1.15)'}
+            onMouseLeave={e => e.currentTarget.style.filter = ''}
+          >
+            {playing ? <PauseIcon /> : <Icon.Play size={12} />}
+          </button>
+
+          {/* restart */}
+          <button
+            onClick={restart}
+            aria-label="Restart"
+            style={{
+              width: 28, height: 28, borderRadius: '50%',
+              background: 'transparent', color: 'var(--fg-muted)',
+              border: '1px solid var(--border-strong)', cursor: 'pointer',
+              display: 'grid', placeItems: 'center',
+              flexShrink: 0, transition: 'color .12s, background .12s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'var(--bg-soft)'; e.currentTarget.style.color = 'var(--fg)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--fg-muted)' }}
+          >
+            <RestartIcon />
+          </button>
+
+          {/* progress bar — clickable */}
+          <div
+            role="slider"
+            aria-valuenow={Math.round(pct)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            tabIndex={0}
+            onClick={handleScrub}
+            style={{
+              flex: 1, height: 6, background: 'var(--bg-soft)', borderRadius: 3,
+              cursor: 'pointer', position: 'relative',
+            }}
+          >
+            <div style={{
+              position: 'absolute', left: 0, top: 0, height: '100%',
+              width: `${pct}%`,
+              background: 'var(--accent)', borderRadius: 3,
+              transition: playing ? 'none' : 'width .08s',
+            }} />
+            {/* thumb */}
+            <div style={{
+              position: 'absolute', top: '50%', left: `${pct}%`,
+              width: 12, height: 12, borderRadius: '50%',
+              background: 'var(--accent)',
+              transform: 'translate(-50%, -50%)',
+              boxShadow: '0 0 0 3px var(--bg-elev)',
+              transition: playing ? 'none' : 'left .08s',
+            }} />
+          </div>
+
+          {/* time */}
+          <span style={{
+            fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-muted)',
+            minWidth: 36, textAlign: 'right', flexShrink: 0,
+          }}>
+            {t.toFixed(1)}s
+          </span>
         </div>
-        <span style={{ minWidth: 130, textAlign: 'right' }}>
-          {t.toFixed(1)}s · {SCRIPT.filter(s => t >= s.t).slice(-1)[0]?.label}
-        </span>
+
+        {/* current phase label */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingLeft: 2 }}>
+          {playing && (
+            <span style={{
+              width: 6, height: 6, borderRadius: '50%', background: 'var(--danger)',
+              animation: 'fh-pulse 1.2s ease-in-out infinite', flexShrink: 0,
+            }} />
+          )}
+          <span style={{
+            fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-muted)',
+            letterSpacing: '0.04em',
+          }}>
+            {playing ? 'LIVE · ' : ''}{currentLabel(t)}
+          </span>
+        </div>
       </div>
     </div>
+  )
+}
+
+/* ── sub-components ─────────────────────────────────────── */
+
+function PauseIcon() {
+  return (
+    <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor">
+      <rect x="0" y="0" width="3.5" height="12" rx="1" />
+      <rect x="6.5" y="0" width="3.5" height="12" rx="1" />
+    </svg>
+  )
+}
+
+function RestartIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+      <path d="M3 3v5h5" />
+    </svg>
   )
 }
 
@@ -149,7 +270,6 @@ function MailList({ arrived, flagged, quarantined }) {
         <span style={{ fontSize: 11, color: 'var(--fg-muted)' }}>{12 + (arrived ? 1 : 0)} unread</span>
       </div>
 
-      {/* suspicious email — slides in */}
       <div style={{
         padding: '12px 14px', borderBottom: '1px solid var(--border)',
         background: quarantined
@@ -165,9 +285,7 @@ function MailList({ arrived, flagged, quarantined }) {
             fontWeight: 500,
             color: quarantined ? 'var(--fg-muted)' : 'var(--fg)',
             textDecoration: quarantined ? 'line-through' : 'none',
-          }}>
-            Microsoft Billing
-          </span>
+          }}>Microsoft Billing</span>
           <span style={{ fontSize: 11, color: 'var(--fg-muted)' }}>09:23</span>
         </div>
         <div style={{ fontSize: 13, fontWeight: 500, marginTop: 4, color: quarantined ? 'var(--fg-muted)' : 'var(--fg)' }}>
@@ -309,7 +427,7 @@ function MailReader({ arrived, scanning, flagged, verdict, alerted, quarantined 
               <span>0.6s</span>
             </div>
             <div style={{ padding: 16 }}>
-              <div style={{ fontSize: 24, fontWeight: 500 }}>Risk score 98</div>
+              <div style={{ fontSize: 24, fontWeight: 600 }}>Risk score 98</div>
               <div style={{ fontSize: 12.5, color: 'var(--fg-muted)', marginTop: 4 }}>
                 Credential harvest · brand impersonation
               </div>

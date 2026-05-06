@@ -18,8 +18,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/"       element={<HubPage    {...props} />} />
-        <Route path="/hub"    element={<Navigate to="/" replace />} />
+        <Route path="/"       element={<Navigate to="/hub" replace />} />
+        <Route path="/hub"    element={<HubPage    {...props} />} />
         <Route path="/fishpo" element={<FishpoPage {...props} />} />
         <Route path="/datco"  element={<DatcoPage  {...props} />} />
       </Routes>

@@ -1,4 +1,4 @@
-/* Frauda Hub — design system tokens */
+/* ── Frauda Hub design system ────────────────────────────── */
 :root {
   --bg: #f7f8fa;
   --bg-elev: #ffffff;
@@ -70,37 +70,84 @@ html, body {
 
 a { color: inherit; }
 
-/* ── utility classes ──────────────────────────────────── */
-.mono { font-family: var(--font-mono); }
+/* ── page transition ─────────────────────────────────────── */
+.page-wrap {
+  animation: fh-pagein 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ── staggered hero animations ───────────────────────────── */
+.hero-badge   { animation: fh-risein 0.5s cubic-bezier(0.22,1,0.36,1) 0.05s both; }
+.hero-headline{ animation: fh-risein 0.6s cubic-bezier(0.22,1,0.36,1) 0.12s both; }
+.hero-body    { animation: fh-risein 0.6s cubic-bezier(0.22,1,0.36,1) 0.22s both; }
+.hero-cta     { animation: fh-risein 0.6s cubic-bezier(0.22,1,0.36,1) 0.32s both; }
+.hero-cards   { animation: fh-risein 0.7s cubic-bezier(0.22,1,0.36,1) 0.42s both; }
+
+/* ── utility ─────────────────────────────────────────────── */
+.mono  { font-family: var(--font-mono); }
 .serif { font-family: var(--font-display); }
 
-/* ── buttons ─────────────────────────────────────────── */
+/* ── product badge (Fishpo / Datco brand labels) ─────────── */
+.product-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--accent);
+}
+
+/* ── buttons ─────────────────────────────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font: 500 14px/1 var(--font-sans);
-  padding: 11px 18px;
+  font: 600 15px/1 var(--font-sans);
+  padding: 13px 22px;
   border-radius: 999px;
-  border: 1px solid transparent;
+  border: 1.5px solid transparent;
   cursor: pointer;
-  transition: transform 0.12s, background 0.12s, border-color 0.12s, color 0.12s, filter 0.12s;
+  transition: transform 0.12s, background 0.12s, border-color 0.12s, color 0.12s, filter 0.12s, box-shadow 0.12s;
   white-space: nowrap;
   text-decoration: none;
+  letter-spacing: -0.01em;
 }
 .btn:active { transform: translateY(1px); }
-.btn-primary { background: var(--accent); color: var(--accent-fg); }
-.btn-primary:hover { filter: brightness(1.1); }
-.btn-ghost { background: transparent; color: var(--fg); border-color: var(--border-strong); }
-.btn-ghost:hover { background: var(--bg-soft); }
-.btn-sm { padding: 7px 12px; font-size: 13px; }
 
-/* ── chips ───────────────────────────────────────────── */
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-fg);
+  box-shadow: 0 2px 8px rgba(26,60,113,0.25);
+}
+.btn-primary:hover { filter: brightness(1.12); box-shadow: 0 4px 16px rgba(26,60,113,0.35); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--fg);
+  border-color: var(--border-strong);
+}
+.btn-ghost:hover { background: var(--bg-soft); }
+
+/* Hero-scale CTA */
+.btn-xl {
+  font-size: 17px;
+  padding: 17px 30px;
+  gap: 10px;
+}
+
+.btn-sm {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 14px;
+}
+
+/* ── chips ───────────────────────────────────────────────── */
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 999px;
   background: var(--bg-soft);
   color: var(--fg-muted);
@@ -112,7 +159,18 @@ a { color: inherit; }
 .chip-warn   { background: var(--warn-soft);   color: var(--warn);   border-color: transparent; }
 .chip-ok     { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
 
-/* ── cards ───────────────────────────────────────────── */
+/* hub-of chip on sub-pages */
+.hub-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 12px/1 var(--font-sans);
+  color: var(--fg-faint);
+  text-decoration: none;
+}
+.hub-chip:hover { color: var(--fg-muted); }
+
+/* ── cards ───────────────────────────────────────────────── */
 .card {
   background: var(--bg-elev);
   border: 1px solid var(--border);
@@ -120,32 +178,94 @@ a { color: inherit; }
   box-shadow: var(--shadow-card);
 }
 
-/* ── headings ────────────────────────────────────────── */
+/* ── headings ────────────────────────────────────────────── */
 .h-display {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.035em;
   line-height: 0.96;
 }
 .h-display em, .serif em {
   font-style: italic;
-  font-weight: 500;
+  font-weight: 600;
 }
 .h-eyebrow {
-  font: 500 11px/1 var(--font-mono);
+  font: 600 11px/1 var(--font-mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--fg-muted);
+  color: var(--fg-faint);
 }
 
-/* ── divider ─────────────────────────────────────────── */
+/* ── stat number ─────────────────────────────────────────── */
+.stat-number {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 4vw, 56px);
+  line-height: 1;
+  font-weight: 700;
+  background: var(--accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── divider ─────────────────────────────────────────────── */
 .div-h { height: 1px; background: var(--border); width: 100%; }
 
 /* hide scrollbars inside scroll regions */
 .no-scrollbar { scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
-/* ── keyframes ───────────────────────────────────────── */
+/* ── responsive layout classes ───────────────────────────── */
+.section    { padding: 120px 64px; }
+.section-sm { padding: 80px 64px; }
+.hero-sect  { padding: 100px 64px 104px; }
+.nav-pad    { padding: 20px 64px; }
+.foot-pad   { padding: 44px 64px; }
+.inner      { max-width: 1152px; margin: 0 auto; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); }
+.grid-halves { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+
+/* ── mobile nav ──────────────────────────────────────────── */
+.nav-links-desktop { display: flex; gap: 28px; }
+.nav-mobile-toggle { display: none; }
+.nav-mobile-menu {
+  display: none;
+  position: fixed; inset: 0; top: 64px; z-index: 100;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 24px;
+  flex-direction: column;
+  gap: 4px;
+  animation: fh-risein 0.2s ease-out both;
+}
+.nav-mobile-menu.open { display: flex; }
+.nav-mobile-link {
+  font-size: 22px;
+  font-weight: 600;
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  color: var(--fg-muted);
+  text-decoration: none;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--border);
+  display: block;
+  transition: color 0.12s;
+}
+.nav-mobile-link:last-child { border-bottom: none; }
+.nav-mobile-link.active, .nav-mobile-link:hover { color: var(--fg); }
+
+/* ── keyframes ───────────────────────────────────────────── */
+@keyframes fh-pagein {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fh-risein {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 @keyframes fh-pulse {
   0%, 100% { opacity: 0.4; transform: scale(1); }
   50%       { opacity: 1;   transform: scale(1.04); }
@@ -162,7 +282,36 @@ a { color: inherit; }
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-@keyframes fh-slidein {
-  from { opacity: 0; transform: translateX(-12px); }
-  to   { opacity: 1; transform: translateX(0); }
+
+/* ── tablet ──────────────────────────────────────────────── */
+@media (max-width: 1000px) {
+  .section    { padding: 88px 40px; }
+  .section-sm { padding: 64px 40px; }
+  .hero-sect  { padding: 72px 40px 80px; }
+  .nav-pad    { padding: 18px 40px; }
+  .foot-pad   { padding: 36px 40px; }
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-halves { gap: 40px; }
+}
+
+/* ── mobile ──────────────────────────────────────────────── */
+@media (max-width: 680px) {
+  .section    { padding: 64px 20px; }
+  .section-sm { padding: 48px 20px; }
+  .hero-sect  { padding: 52px 20px 60px; }
+  .nav-pad    { padding: 14px 20px; }
+  .foot-pad   { padding: 28px 20px; }
+
+  .grid-2     { grid-template-columns: 1fr; }
+  .grid-3     { grid-template-columns: 1fr; }
+  .grid-4     { grid-template-columns: 1fr; }
+  .grid-halves{ grid-template-columns: 1fr; gap: 32px; }
+
+  .nav-links-desktop { display: none; }
+  .nav-mobile-toggle { display: grid; }
+  .nav-actions-desktop { display: none; }
+
+  .btn-xl { font-size: 15px; padding: 14px 22px; }
+  .hero-cta { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .hero-cta .btn { width: 100%; justify-content: center; }
 }

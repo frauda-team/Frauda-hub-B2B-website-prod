@@ -1,10 +1,11 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
-import { Icon, StatusDot, GridBg, LinkedInIcon, FraudaWordmark } from '../components/Brand'
+import { FraudaMark, Icon, StatusDot, GridBg, LinkedInIcon, FraudaWordmark } from '../components/Brand'
 
 export default function DatcoPage({ theme, onToggleTheme }) {
   return (
-    <div style={{ width: '100%', minHeight: '100vh', background: 'var(--bg)', color: 'var(--fg)' }}>
+    <div className="page-wrap" style={{ width: '100%', minHeight: '100vh', background: 'var(--bg)', color: 'var(--fg)' }}>
       <Nav theme={theme} onToggleTheme={onToggleTheme} />
       <Hero />
       <HowItWorks />
@@ -17,53 +18,59 @@ export default function DatcoPage({ theme, onToggleTheme }) {
 
 function Hero() {
   return (
-    <section style={{ position: 'relative', padding: '88px 64px 96px', overflow: 'hidden' }}>
-      <GridBg opacity={0.6} />
+    <section className="hero-sect" style={{ position: 'relative', overflow: 'hidden' }}>
+      <GridBg opacity={0.5} />
       <div aria-hidden="true" style={{
         position: 'absolute', top: -200, right: -160, width: 720, height: 720,
-        background: 'radial-gradient(closest-side, rgba(50,113,215,0.22), transparent 70%)',
+        background: 'radial-gradient(closest-side, rgba(50,113,215,0.18), transparent 70%)',
         pointerEvents: 'none',
       }} />
-      <div style={{ position: 'relative', maxWidth: 1152, margin: '0 auto' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)' }}>
-            Datco
-          </span>
+
+      <div className="inner" style={{ position: 'relative' }}>
+        <div className="hero-badge" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32, flexWrap: 'wrap' }}>
+          <span className="product-badge">Datco</span>
+          <span style={{ color: 'var(--border-strong)', fontSize: 14 }}>·</span>
+          <Link to="/hub" className="hub-chip">
+            <FraudaMark size={14} />
+            A Frauda Hub company
+          </Link>
           <div className="chip chip-accent">
             <StatusDot tone="ok" /> Live demo
           </div>
         </div>
 
-        <h1 className="h-display" style={{ fontSize: 'clamp(52px, 6.5vw, 88px)', margin: 0, maxWidth: 1000 }}>
+        <h1 className="h-display hero-headline" style={{ fontSize: 'clamp(44px, 6.5vw, 88px)', margin: 0, maxWidth: 1000 }}>
           Synthetic data for{' '}
           <em style={{
             fontStyle: 'italic',
             background: 'var(--accent-grad)',
             WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
-            display: 'inline-block', paddingRight: '0.08em',
+            display: 'inline-block', paddingRight: '0.22em',
           }}>FinTech</em>{' '}
           teams.
         </h1>
 
-        <p style={{
-          fontSize: 19, lineHeight: 1.55, color: 'var(--fg-muted)',
-          maxWidth: 620, marginTop: 32,
+        <p className="hero-body" style={{
+          fontSize: 18, lineHeight: 1.6, color: 'var(--fg-muted)',
+          maxWidth: 580, marginTop: 28,
         }}>
           Answer 6 questions. Get a compliant synthetic dataset for fraud detection,
           credit scoring, AML, or payment models — generated on RTU RUDENS HPC.
-          No real customer data ever leaves your hands.
+          No real customer data. No compliance headache.
         </p>
 
-        <div style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap' }}>
+        <div className="hero-cta" style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap' }}>
           <a
             href="https://frauda-team.github.io/Datco-prod/"
             target="_blank" rel="noopener noreferrer"
-            className="btn btn-primary"
+            className="btn btn-primary btn-xl"
             style={{ textDecoration: 'none' }}
           >
-            <Icon.Play size={12} /> Try the live demo
+            <Icon.Play size={14} /> Try the live demo
           </a>
-          <button className="btn btn-ghost">Request access <Icon.Arrow size={14} /></button>
+          <button className="btn btn-ghost btn-xl">
+            Request access <Icon.Arrow size={16} />
+          </button>
         </div>
       </div>
     </section>
@@ -77,13 +84,13 @@ function HowItWorks() {
     ['Validate', 'Receive your dataset with a full quality report — distribution metrics, correlation checks, and a compliance summary ready for auditors.'],
   ]
   return (
-    <section style={{ padding: '120px 64px', background: 'var(--bg-soft)' }}>
-      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+    <section className="section" style={{ background: 'var(--bg-soft)' }}>
+      <div className="inner">
         <div className="h-eyebrow" style={{ marginBottom: 16 }}>How Datco works</div>
         <h2 className="h-display" style={{ fontSize: 'clamp(36px, 4vw, 56px)', margin: 0, maxWidth: 700 }}>
           From question to dataset in minutes.
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, marginTop: 64 }}>
+        <div className="grid-3" style={{ marginTop: 64 }}>
           {steps.map(([t, d], i) => (
             <div key={t} className="card" style={{ padding: '40px 32px 32px' }}>
               <div style={{
@@ -91,11 +98,11 @@ function HowItWorks() {
                 fontStyle: 'italic',
                 background: 'var(--accent-grad)',
                 WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
-                letterSpacing: '0.02em', fontWeight: 500,
+                letterSpacing: '0.02em', fontWeight: 600,
               }}>
                 {['I', 'II', 'III'][i]}
               </div>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: 30, marginBottom: 14, letterSpacing: '-0.01em', fontWeight: 500 }}>{t}</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 28, marginBottom: 14, letterSpacing: '-0.01em', fontWeight: 600 }}>{t}</div>
               <div style={{ fontSize: 15, color: 'var(--fg-muted)', lineHeight: 1.65 }}>{d}</div>
             </div>
           ))}
@@ -107,29 +114,29 @@ function HowItWorks() {
 
 function UseCases() {
   const cases = [
-    { icon: Icon.Shield, t: 'Fraud detection models',    d: 'Train classifiers on realistic transaction patterns — including rare fraud events — without touching production data.' },
-    { icon: Icon.Chip,   t: 'Credit scoring',            d: 'Generate applicant profiles with the statistical fingerprint of your portfolio, ready for model development and validation.' },
-    { icon: Icon.Eye,    t: 'AML & compliance testing',  d: 'Stress-test your AML rules against synthetic suspicious activity reports that mirror real typologies.' },
-    { icon: Icon.Bolt,   t: 'Payment flow simulation',   d: 'Reproduce complex multi-party payment sequences at scale for QA, load testing, and model evaluation.' },
+    { icon: Icon.Shield, t: 'Fraud detection models',   d: 'Train classifiers on realistic transaction patterns — including rare fraud events — without touching production data.' },
+    { icon: Icon.Chip,   t: 'Credit scoring',           d: 'Generate applicant profiles with the statistical fingerprint of your portfolio, ready for model development and validation.' },
+    { icon: Icon.Eye,    t: 'AML & compliance testing', d: 'Stress-test your AML rules against synthetic suspicious activity reports that mirror real typologies.' },
+    { icon: Icon.Bolt,   t: 'Payment flow simulation',  d: 'Reproduce complex multi-party payment sequences at scale for QA, load testing, and model evaluation.' },
   ]
   return (
-    <section style={{ padding: '120px 64px' }}>
-      <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+    <section className="section">
+      <div className="inner">
         <div className="h-eyebrow" style={{ marginBottom: 16 }}>Use cases</div>
         <h2 className="h-display" style={{ fontSize: 'clamp(36px, 4vw, 56px)', margin: 0, maxWidth: 700 }}>
           Built for every FinTech data challenge.
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24, marginTop: 56 }}>
+        <div className="grid-2" style={{ marginTop: 56 }}>
           {cases.map(({ icon: Ic, t, d }) => (
             <div key={t} style={{
               padding: '28px 4px 28px 0',
               borderTop: '1px solid var(--border)',
-              display: 'grid', gridTemplateColumns: '40px 1fr', gap: 18, alignItems: 'start',
+              display: 'grid', gridTemplateColumns: '44px 1fr', gap: 18, alignItems: 'start',
             }}>
-              <div style={{ color: 'var(--accent)', paddingTop: 4 }}><Ic size={22} /></div>
+              <div style={{ color: 'var(--accent)', paddingTop: 4 }}><Ic size={24} /></div>
               <div>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, marginBottom: 8, fontWeight: 500 }}>{t}</div>
-                <div style={{ fontSize: 14.5, color: 'var(--fg-muted)', lineHeight: 1.6, maxWidth: 480 }}>{d}</div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, marginBottom: 10, fontWeight: 600 }}>{t}</div>
+                <div style={{ fontSize: 15, color: 'var(--fg-muted)', lineHeight: 1.65 }}>{d}</div>
               </div>
             </div>
           ))}
@@ -141,36 +148,37 @@ function UseCases() {
 
 function FinalCTA() {
   return (
-    <section style={{ padding: '120px 64px', textAlign: 'center', position: 'relative', overflow: 'hidden', background: 'var(--bg-soft)' }}>
+    <section className="section" style={{ textAlign: 'center', position: 'relative', overflow: 'hidden', background: 'var(--bg-soft)' }}>
       <div aria-hidden="true" style={{
         position: 'absolute', inset: '20% -10% auto -10%', height: 400,
-        background: 'radial-gradient(ellipse at center, rgba(50,113,215,0.15), transparent 70%)',
+        background: 'radial-gradient(ellipse at center, rgba(50,113,215,0.14), transparent 70%)',
         pointerEvents: 'none',
       }} />
-      <div className="h-eyebrow" style={{ marginBottom: 16 }}>Try it now</div>
-      <h2 className="h-display" style={{ fontSize: 'clamp(40px, 5vw, 64px)', margin: '0 auto', maxWidth: 800 }}>
-        Your next model starts with{' '}
-        <em style={{
-          fontStyle: 'italic',
-          background: 'var(--accent-grad)',
-          WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
-          display: 'inline-block', paddingRight: '0.06em',
-        }}>better data.</em>
-      </h2>
-      <p style={{ fontSize: 17, color: 'var(--fg-muted)', maxWidth: 560, margin: '20px auto 0', lineHeight: 1.55 }}>
-        The Datco demo is live. Generate your first synthetic FinTech dataset
-        in under 10 minutes — no account required.
-      </p>
-      <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 32, flexWrap: 'wrap' }}>
-        <a
-          href="https://frauda-team.github.io/Datco-prod/"
-          target="_blank" rel="noopener noreferrer"
-          className="btn btn-primary"
-          style={{ textDecoration: 'none' }}
-        >
-          <Icon.Play size={12} /> Try the live demo
-        </a>
-        <button className="btn btn-ghost">Talk to founders</button>
+      <div className="inner" style={{ position: 'relative' }}>
+        <div className="h-eyebrow" style={{ marginBottom: 16 }}>Try it now</div>
+        <h2 className="h-display" style={{ fontSize: 'clamp(36px, 5vw, 64px)', margin: '0 auto', maxWidth: 800 }}>
+          Your next model starts with{' '}
+          <em style={{
+            fontStyle: 'italic',
+            background: 'var(--accent-grad)',
+            WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
+            display: 'inline-block', paddingRight: '0.2em',
+          }}>better data.</em>
+        </h2>
+        <p style={{ fontSize: 17, color: 'var(--fg-muted)', maxWidth: 520, margin: '20px auto 0', lineHeight: 1.6 }}>
+          The Datco demo is live. Generate your first synthetic FinTech dataset in under 10 minutes — no account required.
+        </p>
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 36, flexWrap: 'wrap' }}>
+          <a
+            href="https://frauda-team.github.io/Datco-prod/"
+            target="_blank" rel="noopener noreferrer"
+            className="btn btn-primary btn-xl"
+            style={{ textDecoration: 'none' }}
+          >
+            <Icon.Play size={14} /> Try the live demo
+          </a>
+          <button className="btn btn-ghost btn-xl">Talk to founders</button>
+        </div>
       </div>
     </section>
   )
@@ -178,14 +186,14 @@ function FinalCTA() {
 
 function Footer() {
   return (
-    <footer style={{
-      borderTop: '1px solid var(--border)', padding: '40px 64px',
+    <footer className="foot-pad" style={{
+      borderTop: '1px solid var(--border)',
       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
       fontSize: 13, color: 'var(--fg-muted)', flexWrap: 'wrap', gap: 16,
     }}>
       <FraudaWordmark size={15} />
-      <div>© 2026 Frauda. Riga, Latvia. All rights reserved.</div>
-      <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+      <div>© 2026 Frauda Hub. Riga, Latvia.</div>
+      <div style={{ display: 'flex', gap: 20, alignItems: 'center', flexWrap: 'wrap' }}>
         <a
           href="https://www.linkedin.com/company/frauda-hub/posts/?feedView=all"
           target="_blank" rel="noopener noreferrer"
