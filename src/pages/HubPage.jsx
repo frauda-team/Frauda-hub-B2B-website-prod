@@ -8,6 +8,7 @@ export default function HubPage({ theme, onToggleTheme }) {
     <div className="page-wrap" style={{ width: '100%', minHeight: '100vh', background: 'var(--bg)', color: 'var(--fg)' }}>
       <Nav theme={theme} onToggleTheme={onToggleTheme} />
       <Hero />
+      <TrustBar />
       <Portfolio />
       <Problem />
       <Team />
@@ -36,22 +37,22 @@ function Hero() {
         </div>
 
         <h1 className="h-display hero-headline" style={{ fontSize: 'clamp(44px, 6.5vw, 88px)', margin: 0, maxWidth: 1000 }}>
-          The fraud-defence{' '}
+          Protect your business from fraud —{' '}
           <em style={{
             fontStyle: 'italic',
             background: 'var(--accent-grad)',
             WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
             display: 'inline-block', paddingRight: '0.2em',
-          }}>hub</em>
-          <br />for European businesses.
+          }}>before</em>
+          <br />it reaches your team.
         </h1>
 
         <p className="hero-body" style={{
           fontSize: 18, lineHeight: 1.6, color: 'var(--fg-muted)',
           maxWidth: 580, marginTop: 28,
         }}>
-          Frauda Hub is a holding company building AI-powered fraud-prevention tools for European SMEs.
-          Two products, one mission: keep your business safe.
+          Frauda Hub builds AI-powered fraud-prevention tools for European SMEs.
+          Two focused products. One mission: stop fraud at the source.
         </p>
 
         <div className="hero-cta" style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap' }}>
@@ -65,8 +66,31 @@ function Hero() {
             <LinkedInIcon size={16} /> Follow on LinkedIn
           </a>
         </div>
+        <div className="gdpr-trust">
+          <span><Icon.Lock size={11} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />GDPR-compliant</span>
+          <span>EU data only</span>
+          <span>Pilot open · 12 EU SMEs onboarded</span>
+        </div>
       </div>
     </section>
+  )
+}
+
+function TrustBar() {
+  const items = [
+    { icon: <Icon.Shield size={13} />, text: 'Backed by RTU & University of Latvia' },
+    { icon: <Icon.Lock size={13} />,   text: 'GDPR-compliant · EU data only' },
+    { icon: <StatusDot tone="ok" />,   text: 'Pilot open — 12 EU SMEs' },
+    { icon: <Icon.Chip size={13} />,   text: 'Built on RTU RUDENS HPC' },
+  ]
+  return (
+    <div className="trust-bar nav-pad">
+      <div className="trust-bar-inner inner">
+        {items.map(({ icon, text }) => (
+          <div key={text} className="trust-item">{icon}{text}</div>
+        ))}
+      </div>
+    </div>
   )
 }
 

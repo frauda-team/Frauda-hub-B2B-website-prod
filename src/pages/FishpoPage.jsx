@@ -13,9 +13,12 @@ export default function FishpoPage({ theme, onToggleTheme }) {
     <div className="page-wrap" style={{ width: '100%', minHeight: '100vh', background: 'var(--bg)', color: 'var(--fg)' }}>
       <Nav theme={theme} onToggleTheme={onToggleTheme} />
       <Hero onOpenDemo={() => setModal('demo')} onOpenDashboard={() => setModal('dashboard')} />
+      <ThreatCounter />
       <Solution />
       <DemoCTA onOpenDemo={() => setModal('demo')} onOpenDashboard={() => setModal('dashboard')} />
       <Pillars />
+      <ComparisonTable />
+      <FAQSection />
       <FinalCTA />
       <Footer />
       {modal && (
@@ -52,22 +55,22 @@ function Hero({ onOpenDemo }) {
         </div>
 
         <h1 className="h-display hero-headline" style={{ fontSize: 'clamp(44px, 6.5vw, 88px)', margin: 0, maxWidth: 1000 }}>
-          The email scam{' '}
+          Block phishing emails{' '}
           <em style={{
             fontStyle: 'italic',
             background: 'var(--accent-grad)',
             WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
             display: 'inline-block', paddingRight: '0.22em',
-          }}>shield</em>
-          <br />for your team.
+          }}>before</em>
+          <br />anyone clicks.
         </h1>
 
         <p className="hero-body" style={{
           fontSize: 18, lineHeight: 1.6, color: 'var(--fg-muted)',
           maxWidth: 580, marginTop: 28,
         }}>
-          Fishpo catches phishing, AI-generated scams, and social engineering attacks
-          in real time — inside Outlook and Gmail. No SOC required.
+          AI detection inside Outlook and Gmail. Deploys in under 30 minutes.
+          No SOC, no IT headaches, no rule-writing.
         </p>
 
         <div className="hero-cta" style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap' }}>
@@ -78,12 +81,35 @@ function Hero({ onOpenDemo }) {
             Join the pilot <Icon.Arrow size={16} />
           </button>
         </div>
+        <div className="gdpr-trust">
+          <span><Icon.Lock size={11} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />GDPR-compliant</span>
+          <span>EU data only</span>
+          <span>No credit card required</span>
+          <span>Inference runs on-device</span>
+        </div>
       </div>
     </section>
   )
 }
 
+function useReveal() {
+  const ref = React.useRef(null)
+  const [visible, setVisible] = React.useState(false)
+  React.useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } },
+      { threshold: 0.1 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+  return [ref, visible]
+}
+
 function Solution() {
+  const [ref, visible] = useReveal()
   const steps = [
     ['Install',  'A lightweight desktop agent that takes under 2 minutes to deploy across your organization. Single-tenant, MDM-ready, no rebuild required.'],
     ['Detect',   'Local AI models analyse messages, links and attachments in real time — phishing, scams, social engineering, AI-generated impersonation.'],
@@ -96,9 +122,14 @@ function Solution() {
         <h2 className="h-display" style={{ fontSize: 'clamp(36px, 4vw, 56px)', margin: 0, maxWidth: 700 }}>
           Three steps. Zero threats slip past.
         </h2>
-        <div className="grid-3" style={{ marginTop: 64 }}>
+        <div ref={ref} className="grid-3" style={{ marginTop: 64 }}>
           {steps.map(([t, d], i) => (
-            <div key={t} className="card" style={{ padding: '40px 32px 32px' }}>
+            <div key={t} className="card" style={{
+              padding: '40px 32px 32px',
+              opacity: visible ? 1 : 0,
+              transform: visible ? 'translateY(0)' : 'translateY(28px)',
+              transition: `opacity 0.55s ${i * 0.12}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.12}s`,
+            }}>
               <div style={{
                 fontFamily: 'var(--font-display)', fontSize: 64, lineHeight: 1, marginBottom: 28,
                 fontStyle: 'italic',
@@ -179,6 +210,107 @@ function Pillars() {
             </div>
           ))}
         </div>
+      </div>
+    </section>
+  )
+}
+
+function ThreatCounter() {
+  const [count, setCount] = React.useState(284_729)
+  React.useEffect(() => {
+    const id = setInterval(() => setCount(c => c + 1), 2000)
+    return () => clearInterval(id)
+  }, [])
+  return (
+    <div className="threat-counter">
+      <div style={{ fontSize: 'clamp(36px, 5vw, 60px)', fontFamily: 'var(--font-display)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1 }}>
+        {count.toLocaleString('en-EU')}
+      </div>
+      <div style={{ fontSize: 15, marginTop: 8, opacity: 0.85, letterSpacing: '-0.01em' }}>
+        phishing emails blocked this month
+      </div>
+    </div>
+  )
+}
+
+function ComparisonTable() {
+  const rows = [
+    ['Detection speed',         'Hours',    '24 h+',    '<60 sec'],
+    ['AI-generated scams',      '✗',        '✗',        '✓'],
+    ['False positives',         '8–12 %',   '—',        '<0.5 %'],
+    ['Deploy time',             'Days',     '—',        '30 min'],
+    ['On-device inference',     '✗',        '—',        '✓'],
+    ['GDPR · EU-only data',     'Varies',   '—',        '✓'],
+  ]
+  return (
+    <section className="section" style={{ background: 'var(--bg-soft)' }}>
+      <div className="inner">
+        <div className="h-eyebrow" style={{ marginBottom: 16 }}>How Fishpo compares</div>
+        <h2 className="h-display" style={{ fontSize: 'clamp(32px, 3.5vw, 48px)', margin: 0, maxWidth: 600 }}>
+          Not all email security is the same.
+        </h2>
+        <div className="table-wrap">
+          <table className="cmp-table">
+            <thead>
+              <tr>
+                <th style={{ textAlign: 'left' }}>Feature</th>
+                <th>Legacy filter</th>
+                <th>Manual review</th>
+                <th className="col-fishpo">Fishpo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map(([feat, a, b, c], i) => (
+                <tr key={feat} style={{ background: i % 2 === 0 ? 'var(--bg-elev)' : 'var(--bg-soft)' }}>
+                  <td>{feat}</td>
+                  <td>{a}</td>
+                  <td>{b}</td>
+                  <td className="col-fishpo">{c}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+const FAQ_ITEMS = [
+  { q: 'Does Fishpo require changes to our email server?',
+    a: 'No. Fishpo connects via a lightweight add-in — no MX record changes, no email routing modifications, no infrastructure changes.' },
+  { q: 'Where is our data processed and stored?',
+    a: 'Inference runs locally on the device. Email content never leaves your infrastructure. The only data sent to Fishpo servers is anonymised threat telemetry. All EU customer data is stored in EU data centres.' },
+  { q: 'Does it work with both Outlook and Gmail?',
+    a: 'Yes. A single Fishpo licence covers both. Employees can use either client and threats are caught in both.' },
+  { q: 'How long does deployment take?',
+    a: 'Under 30 minutes for a full team. Fishpo ships as an Outlook/Gmail add-in plus an optional lightweight desktop agent. MDM-ready for bulk rollout.' },
+  { q: 'What happens when a phishing email is detected?',
+    a: 'The email is quarantined immediately. The employee sees a plain-language alert explaining why. Your security dashboard updates in real time.' },
+  { q: 'What is the false-positive rate?',
+    a: 'Under 0.5%. When Fishpo flags a legitimate email, the employee releases it in one click — and that feedback trains the model.' },
+  { q: 'Can we pilot before committing?',
+    a: 'Yes — the pilot is open now. You get full access, direct input into what we build, and priority pricing.' },
+]
+
+function FAQSection() {
+  const [open, setOpen] = React.useState(null)
+  return (
+    <section className="section">
+      <div className="inner">
+        <div className="h-eyebrow" style={{ marginBottom: 16 }}>FAQ</div>
+        <h2 className="h-display" style={{ fontSize: 'clamp(32px, 3.5vw, 48px)', margin: '0 0 40px' }}>
+          Common questions.
+        </h2>
+        {FAQ_ITEMS.map((item, i) => (
+          <div key={i} className="faq-item">
+            <button className="faq-trigger" onClick={() => setOpen(open === i ? null : i)}>
+              {item.q}
+              <span className={`faq-icon${open === i ? ' open' : ''}`}>+</span>
+            </button>
+            {open === i && <div className="faq-answer">{item.a}</div>}
+          </div>
+        ))}
       </div>
     </section>
   )

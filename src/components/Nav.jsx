@@ -11,6 +11,7 @@ const LINKS = [
 export default function Nav({ theme, onToggleTheme }) {
   const { pathname } = useLocation()
   const [menuOpen, setMenuOpen] = React.useState(false)
+  const [ctaDismissed, setCtaDismissed] = React.useState(false)
 
   React.useEffect(() => {
     setMenuOpen(false)
@@ -103,6 +104,26 @@ export default function Nav({ theme, onToggleTheme }) {
           </button>
         </div>
       </header>
+
+      {/* Sticky mobile CTA bar */}
+      {!ctaDismissed && !menuOpen && (
+        <div className="sticky-cta-mobile">
+          <button className="btn btn-primary" style={{ flex: 1, justifyContent: 'center' }}>
+            Join early access <Icon.Arrow size={14} />
+          </button>
+          <button
+            onClick={() => setCtaDismissed(true)}
+            aria-label="Dismiss"
+            style={{
+              width: 44, height: 44, borderRadius: 8, border: '1px solid var(--border-strong)',
+              background: 'transparent', color: 'var(--fg-muted)', cursor: 'pointer',
+              display: 'grid', placeItems: 'center', flexShrink: 0,
+            }}
+          >
+            <Icon.X size={14} />
+          </button>
+        </div>
+      )}
 
       {/* Mobile fullscreen menu */}
       <div className={`nav-mobile-menu ${menuOpen ? 'open' : ''}`}>
