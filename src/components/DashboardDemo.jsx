@@ -1,6 +1,16 @@
 import React from 'react'
 import { FraudaMark, Icon, StatusDot } from './Brand'
 
+function useIsMobile() {
+  const [v, setV] = React.useState(() => window.innerWidth <= 680)
+  React.useEffect(() => {
+    const fn = () => setV(window.innerWidth <= 680)
+    window.addEventListener('resize', fn)
+    return () => window.removeEventListener('resize', fn)
+  }, [])
+  return v
+}
+
 const DURATION = 13
 
 const SCENES = [
@@ -15,6 +25,7 @@ function currentLabel(t) {
 }
 
 export default function DashboardDemo() {
+  const isMobile = useIsMobile()
   const [t, setT] = React.useState(0)
   const [playing, setPlaying] = React.useState(true)
   const raf = React.useRef(null)
@@ -54,8 +65,8 @@ export default function DashboardDemo() {
       display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-sans)',
     }}>
       {/* app shell */}
-      <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', flex: 1, minHeight: 0 }}>
-        <Sidebar scene={scene} />
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '200px 1fr', flex: 1, minHeight: 0 }}>
+        {!isMobile && <Sidebar scene={scene} />}
         <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
           <Topbar scene={scene} />
           <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>

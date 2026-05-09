@@ -1,6 +1,16 @@
 import React from 'react'
 import { Icon, StatusDot } from './Brand'
 
+function useIsMobile() {
+  const [v, setV] = React.useState(() => window.innerWidth <= 680)
+  React.useEffect(() => {
+    const fn = () => setV(window.innerWidth <= 680)
+    window.addEventListener('resize', fn)
+    return () => window.removeEventListener('resize', fn)
+  }, [])
+  return v
+}
+
 const SCRIPT = [
   { t: 0,    label: 'Idle inbox' },
   { t: 1.2,  label: 'New email arrives' },
@@ -16,6 +26,7 @@ function currentLabel(t) {
 }
 
 export default function FishpoDemo() {
+  const isMobile = useIsMobile()
   const [t, setT] = React.useState(0)
   const [playing, setPlaying] = React.useState(true)
   const raf = React.useRef(null)
@@ -80,9 +91,9 @@ export default function FishpoDemo() {
       </div>
 
       {/* Outlook layout */}
-      <div style={{ display: 'grid', gridTemplateColumns: '200px 300px 1fr', flex: 1, minHeight: 0, overflow: 'hidden' }}>
-        <Sidebar />
-        <MailList arrived={arrived} flagged={flagged} quarantined={quarantined} />
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '200px 300px 1fr', flex: 1, minHeight: 0, overflow: 'hidden' }}>
+        {!isMobile && <Sidebar />}
+        {!isMobile && <MailList arrived={arrived} flagged={flagged} quarantined={quarantined} />}
         <MailReader arrived={arrived} flagged={flagged} verdict={verdict} quarantined={quarantined} />
       </div>
 

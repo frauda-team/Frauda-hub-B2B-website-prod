@@ -35,10 +35,9 @@ function Hero({ onOpenDemo }) {
   return (
     <section className="hero-sect" style={{ position: 'relative', overflow: 'hidden' }}>
       <GridBg opacity={0.5} />
-      <div aria-hidden="true" style={{
+      <div aria-hidden="true" className="hero-blob" style={{
         position: 'absolute', top: -200, right: -160, width: 720, height: 720,
         background: 'radial-gradient(closest-side, rgba(50,113,215,0.18), transparent 70%)',
-        pointerEvents: 'none',
       }} />
 
       <div className="inner" style={{ position: 'relative' }}>
@@ -123,10 +122,7 @@ function DemoCTA({ onOpenDemo, onOpenDashboard }) {
   return (
     <section className="section-sm">
       <div className="inner">
-        <div className="card" style={{
-          padding: '48px 52px',
-          display: 'grid', gridTemplateColumns: '1fr auto', gap: 40, alignItems: 'center',
-        }}>
+        <div className="card demo-cta-card" style={{ padding: '48px 52px' }}>
           <div>
             <div className="h-eyebrow" style={{ marginBottom: 14 }}>Product videos</div>
             <div className="h-display" style={{ fontSize: 'clamp(28px, 3vw, 40px)', maxWidth: 560 }}>
@@ -215,10 +211,9 @@ function FinalCTA() {
 
 function Footer() {
   return (
-    <footer className="foot-pad" style={{
+    <footer className="foot-pad footer-row" style={{
       borderTop: '1px solid var(--border)',
-      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-      fontSize: 13, color: 'var(--fg-muted)', flexWrap: 'wrap', gap: 16,
+      fontSize: 13, color: 'var(--fg-muted)',
     }}>
       <FraudaWordmark size={15} />
       <div>© 2026 Frauda Hub. Riga, Latvia.</div>
@@ -268,9 +263,9 @@ function Modal({ title, children, onClose }) {
     >
       {/* title bar */}
       <div
+        className="modal-title-bar"
         onClick={e => e.stopPropagation()}
         style={{
-          width: '65vw', maxWidth: 1100, minWidth: 320,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           marginBottom: 10, color: 'rgba(255,255,255,0.8)', fontFamily: 'var(--font-sans)',
         }}
@@ -280,7 +275,7 @@ function Modal({ title, children, onClose }) {
           onClick={onClose}
           aria-label="Close"
           style={{
-            width: 32, height: 32, borderRadius: 8, border: 'none',
+            width: 44, height: 44, borderRadius: 8, border: 'none',
             background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.85)',
             display: 'grid', placeItems: 'center', cursor: 'pointer',
             transition: 'background .12s',
@@ -294,12 +289,9 @@ function Modal({ title, children, onClose }) {
 
       {/* video container — ~65% of screen, 16:9-ish */}
       <div
+        className="modal-box"
         onClick={e => e.stopPropagation()}
         style={{
-          width: '65vw', maxWidth: 1100, minWidth: 320,
-          height: 'calc(65vw * 0.58)',
-          maxHeight: 'calc(100vh - 140px)',
-          minHeight: 280,
           borderRadius: 14, overflow: 'hidden',
           boxShadow: '0 32px 96px rgba(0,0,0,0.65)',
           animation: 'fh-risein 0.3s cubic-bezier(0.22,1,0.36,1) both',

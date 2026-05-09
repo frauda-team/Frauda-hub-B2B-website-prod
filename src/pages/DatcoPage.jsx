@@ -20,10 +20,9 @@ function Hero() {
   return (
     <section className="hero-sect" style={{ position: 'relative', overflow: 'hidden' }}>
       <GridBg opacity={0.5} />
-      <div aria-hidden="true" style={{
+      <div aria-hidden="true" className="hero-blob" style={{
         position: 'absolute', top: -200, right: -160, width: 720, height: 720,
         background: 'radial-gradient(closest-side, rgba(50,113,215,0.18), transparent 70%)',
-        pointerEvents: 'none',
       }} />
 
       <div className="inner" style={{ position: 'relative' }}>
@@ -184,10 +183,9 @@ function FinalCTA() {
 
 function Footer() {
   return (
-    <footer className="foot-pad" style={{
+    <footer className="foot-pad footer-row" style={{
       borderTop: '1px solid var(--border)',
-      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-      fontSize: 13, color: 'var(--fg-muted)', flexWrap: 'wrap', gap: 16,
+      fontSize: 13, color: 'var(--fg-muted)',
     }}>
       <FraudaWordmark size={15} />
       <div>© 2026 Frauda Hub. Riga, Latvia.</div>

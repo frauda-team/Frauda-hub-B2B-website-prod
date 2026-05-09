@@ -40,7 +40,7 @@ export default function Nav({ theme, onToggleTheme }) {
             onClick={onToggleTheme}
             aria-label="Toggle theme"
             style={{
-              width: 32, height: 32, borderRadius: 999, display: 'grid', placeItems: 'center',
+              width: 44, height: 44, borderRadius: 999, display: 'grid', placeItems: 'center',
               border: '1px solid var(--border-strong)', background: 'transparent',
               color: 'var(--fg)', cursor: 'pointer', transition: 'background .15s',
             }}
@@ -74,7 +74,7 @@ export default function Nav({ theme, onToggleTheme }) {
 
         {/* Right: actions + hamburger */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-          <div className="nav-actions-desktop" style={{ display: 'flex', gap: 10 }}>
+          <div className="nav-actions-desktop">
             <a
               href="https://www.linkedin.com/company/frauda-hub/posts/?feedView=all"
               target="_blank" rel="noopener noreferrer"
@@ -94,7 +94,7 @@ export default function Nav({ theme, onToggleTheme }) {
             onClick={() => setMenuOpen(o => !o)}
             aria-label="Toggle menu"
             style={{
-              width: 36, height: 36, borderRadius: 8, placeItems: 'center',
+              width: 44, height: 44, borderRadius: 8, placeItems: 'center',
               border: '1px solid var(--border-strong)', background: 'transparent',
               color: 'var(--fg)', cursor: 'pointer',
             }}

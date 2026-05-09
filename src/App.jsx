@@ -5,10 +5,7 @@ import FishpoPage from './pages/FishpoPage'
 import DatcoPage from './pages/DatcoPage'
 
 export default function App() {
-  const [theme, setTheme] = React.useState(() =>
-    typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark' : 'light'
-  )
+  const [theme, setTheme] = React.useState('light')
 
   React.useEffect(() => { document.body.dataset.theme = theme }, [theme])
 

@@ -66,6 +66,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   transition: background 0.2s, color 0.2s;
+  overflow-x: hidden;
 }
 
 a { color: inherit; }
@@ -235,6 +236,7 @@ a { color: inherit; }
 
 /* ── mobile nav ──────────────────────────────────────────── */
 .nav-links-desktop { display: flex; gap: 28px; }
+.nav-actions-desktop { display: flex; gap: 10px; }
 .nav-mobile-toggle { display: none; }
 .nav-mobile-menu {
   display: none;
@@ -319,4 +321,70 @@ a { color: inherit; }
   .btn-xl { font-size: 15px; padding: 14px 22px; }
   .hero-cta { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
   .hero-cta .btn { width: 100%; justify-content: center; }
+}
+
+/* ── hero gradient blob — hidden on mobile (prevents overflow-x) ── */
+.hero-blob { pointer-events: none; }
+@media (max-width: 680px) {
+  .hero-blob { display: none; }
+}
+
+/* ── demo CTA card — text+buttons reflow to column on mobile ── */
+.demo-cta-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: center;
+}
+@media (max-width: 680px) {
+  .demo-cta-card { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* ── institution logos — flex row that wraps on mobile ── */
+.institution-logos-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.institution-logos-grid > * { flex: 1 1 calc(33% - 14px); min-width: 120px; }
+
+/* ── modal — near full-screen on mobile ── */
+.modal-box {
+  width: 65vw;
+  max-width: 1100px;
+  min-width: 320px;
+  height: calc(65vw * 0.58);
+  max-height: calc(100vh - 140px);
+  min-height: 280px;
+}
+@media (max-width: 680px) {
+  .modal-box {
+    width: 100%;
+    min-width: unset;
+    height: calc(100svh - 140px);
+    max-height: unset;
+    min-height: unset;
+    border-radius: 10px;
+  }
+}
+
+.modal-title-bar {
+  width: 65vw;
+  max-width: 1100px;
+  min-width: 320px;
+}
+@media (max-width: 680px) {
+  .modal-title-bar { width: 100%; min-width: unset; }
+}
+
+/* ── footer — stack on mobile ── */
+.footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+@media (max-width: 680px) {
+  .footer-row { flex-direction: column; align-items: flex-start; }
 }
