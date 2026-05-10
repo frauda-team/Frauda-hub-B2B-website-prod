@@ -379,7 +379,6 @@ function FinalCTA({ onContact }) {
       </p>
       <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 32, flexWrap: 'wrap' }}>
         <button className="btn btn-primary" onClick={onContact}>Get in touch <Icon.Arrow size={14} /></button>
-        <button className="btn btn-ghost" onClick={onContact}>Talk to founders</button>
       </div>
     </section>
   )

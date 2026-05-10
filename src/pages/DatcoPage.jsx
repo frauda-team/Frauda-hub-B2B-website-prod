@@ -248,7 +248,6 @@ function FinalCTA({ onContact }) {
           >
             <Icon.Play size={14} /> Try the live demo
           </a>
-          <button className="btn btn-ghost btn-xl" onClick={onContact}>Talk to founders</button>
         </div>
       </div>
     </section>
