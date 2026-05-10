@@ -220,12 +220,26 @@ function Pillars() {
 
 function ComparisonTable() {
   const rows = [
-    ['Detection speed',         'Minutes',  'Minutes',  '<60 sec'],
-    ['AI-generated scams',      'Partial',  'Partial',  '✓'],
-    ['False positives',         '2–5 %',    '3–7 %',    '<0.5 %'],
-    ['Deploy time',             'Days',     'Days',     '30 min'],
-    ['On-device inference',     '✗',        '✗',        '✓'],
-    ['GDPR · EU-only data',     'Partial',  'Partial',  '✓'],
+    ['MX record change required',
+     'Yes; reroutes all mail through US cloud',
+     'Yes; reroutes all mail through UK/US cloud',
+     'No; agent scans locally on employee PC'],
+    ['Data processing location',
+     'US cloud servers (DPA required for GDPR)',
+     'UK/US/AU cloud (DPA required for GDPR)',
+     'On-premises; email data never leaves the organization'],
+    ['Baltic language scam detection (LV / RU / UK)',
+     'English-centric (weaker in non-EN languages)',
+     'English-centric',
+     'Fine-tuned LLM for LV / RU / UK / EN scam patterns'],
+    ['Deployment complexity',
+     'Hours-days; MX config + policy tuning; 11% customers have MX misconfigs',
+     'Hours; MX config + admin console setup',
+     'Minutes; install agent on employee PCs'],
+    ['IT security team required',
+     'Yes; steep learning curve; dedicated security staff needed for policy management',
+     'Yes; admin console training required; ongoing fine-tuning',
+     'No; install and forget; runs silently in background'],
   ]
   return (
     <section className="section" style={{ background: 'var(--bg-soft)' }}>
@@ -247,10 +261,10 @@ function ComparisonTable() {
             <tbody>
               {rows.map(([feat, a, b, c], i) => (
                 <tr key={feat} style={{ background: i % 2 === 0 ? 'var(--bg-elev)' : 'var(--bg-soft)' }}>
-                  <td>{feat}</td>
-                  <td>{a}</td>
-                  <td>{b}</td>
-                  <td className="col-fishpo">{c}</td>
+                  <td style={{ textAlign: 'left', verticalAlign: 'top' }}>{feat}</td>
+                  <td style={{ textAlign: 'left', verticalAlign: 'top' }}>{a}</td>
+                  <td style={{ textAlign: 'left', verticalAlign: 'top' }}>{b}</td>
+                  <td className="col-fishpo" style={{ textAlign: 'left', verticalAlign: 'top' }}>{c}</td>
                 </tr>
               ))}
             </tbody>
