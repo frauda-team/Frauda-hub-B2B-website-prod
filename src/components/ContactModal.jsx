@@ -124,10 +124,11 @@ function EmailCard() {
 
   return (
     <div style={{
-      display: 'flex', alignItems: 'center', gap: 16,
+      display: 'flex', alignItems: 'flex-start', gap: 16,
       padding: '16px 18px',
       borderRadius: 'var(--r-md)',
       border: '1px solid var(--border)',
+      flexWrap: 'wrap',
     }}>
       <div style={{
         width: 44, height: 44, borderRadius: 10,
@@ -137,17 +138,17 @@ function EmailCard() {
       }}>
         <Icon.Mail size={20} />
       </div>
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ flex: 1, minWidth: 160 }}>
         <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--fg)' }}>Email</div>
-        <div style={{ fontSize: 13, color: 'var(--fg-muted)', marginTop: 3 }}>{email}</div>
-      </div>
-      <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
-        <ActionBtn href={`mailto:${email}`} label="Open" title="Open in mail client">
-          <Icon.Arrow size={13} />
-        </ActionBtn>
-        <ActionBtn onClick={handleCopy} label={copied ? 'Copied!' : 'Copy'} title="Copy email address">
-          {copied ? <Icon.Check size={13} /> : <CopyIcon />}
-        </ActionBtn>
+        <div style={{ fontSize: 13, color: 'var(--fg-muted)', marginTop: 3, marginBottom: 10 }}>{email}</div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <ActionBtn href={`mailto:${email}`} label="Open in mail" title="Open in mail client">
+            <Icon.Arrow size={13} />
+          </ActionBtn>
+          <ActionBtn onClick={handleCopy} label={copied ? 'Copied!' : 'Copy address'} title="Copy email address">
+            {copied ? <Icon.Check size={13} /> : <CopyIcon />}
+          </ActionBtn>
+        </div>
       </div>
     </div>
   )

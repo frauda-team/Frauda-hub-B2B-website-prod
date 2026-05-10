@@ -421,6 +421,12 @@ function Footer({ onContact }) {
         >
           <LinkedInIcon size={13} /> LinkedIn
         </a>
+        <a
+          href="mailto:team@frauda.io"
+          style={{ textDecoration: 'none', color: 'var(--fg-muted)' }}
+          onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}
+        >team@frauda.io</a>
         <button onClick={onContact} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontSize: 13, color: 'var(--fg-muted)', fontFamily: 'inherit' }}
           onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
           onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}
