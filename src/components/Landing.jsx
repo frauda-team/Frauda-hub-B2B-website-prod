@@ -1,24 +1,29 @@
 import React from 'react'
 import { FraudaMark, FraudaWordmark, Icon, StatusDot, GridBg, LinkedInIcon } from './Brand'
+import ContactModal from './ContactModal'
 
 export default function Landing({ onOpenDemo, onOpenDashboard, theme, onToggleTheme }) {
+  const [showContact, setShowContact] = React.useState(false)
+  const openContact = () => setShowContact(true)
+  const closeContact = () => setShowContact(false)
   return (
     <div style={{ width: '100%', minHeight: '100vh', background: 'var(--bg)', color: 'var(--fg)' }}>
-      <Nav theme={theme} onToggleTheme={onToggleTheme} onOpenDemo={onOpenDemo} />
-      <Hero onOpenDemo={onOpenDemo} />
+      <Nav theme={theme} onToggleTheme={onToggleTheme} onOpenDemo={onOpenDemo} onContact={openContact} />
+      <Hero onOpenDemo={onOpenDemo} onContact={openContact} />
       <Problem />
       <Solution />
       <DemoCTA onOpenDemo={onOpenDemo} onOpenDashboard={onOpenDashboard} />
       <Pillars />
-      <Team />
-      <FinalCTA />
+      <Team onContact={openContact} />
+      <FinalCTA onContact={openContact} />
       <BackedBy />
-      <Footer />
+      <Footer onContact={openContact} />
+      {showContact && <ContactModal onClose={closeContact} />}
     </div>
   )
 }
 
-function Nav({ theme, onToggleTheme, onOpenDemo }) {
+function Nav({ theme, onToggleTheme, onOpenDemo, onContact }) {
   return (
     <header style={{
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -63,15 +68,15 @@ function Nav({ theme, onToggleTheme, onOpenDemo }) {
         >
           <LinkedInIcon size={13} /> Follow
         </a>
-        <button className="btn btn-primary btn-sm">
-          Join early access <Icon.Arrow size={13} />
+        <button className="btn btn-primary btn-sm" onClick={onContact}>
+          Get in touch <Icon.Arrow size={13} />
         </button>
       </div>
     </header>
   )
 }
 
-function Hero({ onOpenDemo }) {
+function Hero({ onOpenDemo, onContact }) {
   return (
     <section style={{ position: 'relative', padding: '88px 64px 96px', overflow: 'hidden' }}>
       <GridBg opacity={0.6} />
@@ -108,7 +113,7 @@ function Hero({ onOpenDemo }) {
         </p>
 
         <div style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap' }}>
-          <button className="btn btn-primary">Join early access <Icon.Arrow size={14} /></button>
+          <button className="btn btn-primary" onClick={onContact}>Get in touch <Icon.Arrow size={14} /></button>
           <a
             href="https://www.linkedin.com/company/frauda-hub/posts/?feedView=all"
             target="_blank" rel="noopener noreferrer"
@@ -320,7 +325,7 @@ function Pillars() {
   )
 }
 
-function Team() {
+function Team({ onContact }) {
   return (
     <section style={{ padding: '96px 64px', background: 'var(--bg-soft)' }}>
       <div style={{ maxWidth: 1152, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
@@ -351,7 +356,7 @@ function Team() {
   )
 }
 
-function FinalCTA() {
+function FinalCTA({ onContact }) {
   return (
     <section style={{ padding: '120px 64px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
       <div aria-hidden="true" style={{
@@ -359,7 +364,7 @@ function FinalCTA() {
         background: 'radial-gradient(ellipse at center, rgba(50,113,215,0.15), transparent 70%)',
         pointerEvents: 'none',
       }} />
-      <div className="h-eyebrow" style={{ marginBottom: 16 }}>Early access</div>
+      <div className="h-eyebrow" style={{ marginBottom: 16 }}>Get in touch</div>
       <h2 className="h-display" style={{ fontSize: 'clamp(40px, 5vw, 64px)', margin: '0 auto', maxWidth: 800 }}>
         Ready to protect your team from the{' '}
         <em style={{
@@ -370,12 +375,11 @@ function FinalCTA() {
         scam?
       </h2>
       <p style={{ fontSize: 17, color: 'var(--fg-muted)', maxWidth: 560, margin: '20px auto 0', lineHeight: 1.55 }}>
-        We're onboarding our first partners. Share your needs, and help us build
-        the fraud detection your business deserves.
+        We're in the research phase and talking to businesses. Reach out — your input shapes what we build.
       </p>
       <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 32, flexWrap: 'wrap' }}>
-        <button className="btn btn-primary">Join early access <Icon.Arrow size={14} /></button>
-        <button className="btn btn-ghost">Talk to founders</button>
+        <button className="btn btn-primary" onClick={onContact}>Get in touch <Icon.Arrow size={14} /></button>
+        <button className="btn btn-ghost" onClick={onContact}>Talk to founders</button>
       </div>
     </section>
   )
@@ -399,7 +403,7 @@ function BackedBy() {
   )
 }
 
-function Footer() {
+function Footer({ onContact }) {
   return (
     <footer style={{
       borderTop: '1px solid var(--border)', padding: '40px 64px',
@@ -418,7 +422,11 @@ function Footer() {
         >
           <LinkedInIcon size={13} /> LinkedIn
         </a>
-        {['Contact', 'Privacy', 'Security'].map(l => (
+        <button onClick={onContact} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontSize: 13, color: 'var(--fg-muted)', fontFamily: 'inherit' }}
+          onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}
+        >Contact</button>
+        {['Privacy', 'Security'].map(l => (
           <a key={l} href="#" style={{ textDecoration: 'none', color: 'var(--fg-muted)' }}
             onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
             onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}

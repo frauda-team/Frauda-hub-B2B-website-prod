@@ -8,7 +8,7 @@ const LINKS = [
   { label: 'Datco',  path: '/datco' },
 ]
 
-export default function Nav({ theme, onToggleTheme }) {
+export default function Nav({ theme, onToggleTheme, onContact }) {
   const { pathname } = useLocation()
   const [menuOpen, setMenuOpen] = React.useState(false)
   const [ctaDismissed, setCtaDismissed] = React.useState(false)
@@ -84,8 +84,8 @@ export default function Nav({ theme, onToggleTheme }) {
             >
               <LinkedInIcon size={13} /> Follow
             </a>
-            <button className="btn btn-primary btn-sm">
-              Join early access <Icon.Arrow size={13} />
+            <button className="btn btn-primary btn-sm" onClick={onContact}>
+              Get in touch <Icon.Arrow size={13} />
             </button>
           </div>
 
@@ -108,8 +108,8 @@ export default function Nav({ theme, onToggleTheme }) {
       {/* Sticky mobile CTA bar */}
       {!ctaDismissed && !menuOpen && (
         <div className="sticky-cta-mobile">
-          <button className="btn btn-primary" style={{ flex: 1, justifyContent: 'center' }}>
-            Join early access <Icon.Arrow size={14} />
+          <button className="btn btn-primary" style={{ flex: 1, justifyContent: 'center' }} onClick={onContact}>
+            Get in touch <Icon.Arrow size={14} />
           </button>
           <button
             onClick={() => setCtaDismissed(true)}
@@ -145,8 +145,8 @@ export default function Nav({ theme, onToggleTheme }) {
           >
             <LinkedInIcon size={14} /> Follow on LinkedIn
           </a>
-          <button className="btn btn-primary" style={{ justifyContent: 'center' }}>
-            Join early access <Icon.Arrow size={14} />
+          <button className="btn btn-primary" style={{ justifyContent: 'center' }} onClick={onContact}>
+            Get in touch <Icon.Arrow size={14} />
           </button>
         </div>
       </div>

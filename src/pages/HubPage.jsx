@@ -1,25 +1,30 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
+import ContactModal from '../components/ContactModal'
 import { FraudaMark, FraudaWordmark, Icon, StatusDot, GridBg, LinkedInIcon } from '../components/Brand'
 
 export default function HubPage({ theme, onToggleTheme }) {
+  const [showContact, setShowContact] = React.useState(false)
+  const openContact = () => setShowContact(true)
+  const closeContact = () => setShowContact(false)
   return (
     <div className="page-wrap" style={{ width: '100%', minHeight: '100vh', background: 'var(--bg)', color: 'var(--fg)' }}>
-      <Nav theme={theme} onToggleTheme={onToggleTheme} />
-      <Hero />
+      <Nav theme={theme} onToggleTheme={onToggleTheme} onContact={openContact} />
+      <Hero onContact={openContact} />
       <TrustBar />
       <Portfolio />
       <Problem />
-      <Team />
-      <FinalCTA />
+      <Team onContact={openContact} />
+      <FinalCTA onContact={openContact} />
       <BackedBy />
-      <Footer />
+      <Footer onContact={openContact} />
+      {showContact && <ContactModal onClose={closeContact} />}
     </div>
   )
 }
 
-function Hero() {
+function Hero({ onContact }) {
   return (
     <section className="hero-sect" style={{ position: 'relative', overflow: 'hidden' }}>
       <GridBg opacity={0.5} />
@@ -56,7 +61,7 @@ function Hero() {
         </p>
 
         <div className="hero-cta" style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap' }}>
-          <button className="btn btn-primary btn-xl">Join early access <Icon.Arrow size={16} /></button>
+          <button className="btn btn-primary btn-xl" onClick={onContact}>Get in touch <Icon.Arrow size={16} /></button>
           <a
             href="https://www.linkedin.com/company/frauda-hub/posts/?feedView=all"
             target="_blank" rel="noopener noreferrer"
@@ -194,7 +199,7 @@ function Problem() {
   )
 }
 
-function Team() {
+function Team({ onContact }) {
   return (
     <section className="section" style={{ background: 'var(--bg-soft)' }}>
       <div className="inner">
@@ -209,7 +214,7 @@ function Team() {
               from Latvia's top universities and the EU's cyber-resilience initiatives.
             </p>
             <div style={{ marginTop: 28, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <button className="btn btn-ghost">Talk to the team <Icon.Arrow size={14} /></button>
+              <button className="btn btn-ghost" onClick={onContact}>Talk to the team <Icon.Arrow size={14} /></button>
             </div>
           </div>
           <InstitutionLogos />
@@ -219,7 +224,7 @@ function Team() {
   )
 }
 
-function FinalCTA() {
+function FinalCTA({ onContact }) {
   return (
     <section className="section" style={{ textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
       <div aria-hidden="true" style={{
@@ -228,7 +233,7 @@ function FinalCTA() {
         pointerEvents: 'none',
       }} />
       <div className="inner" style={{ position: 'relative' }}>
-        <div className="h-eyebrow" style={{ marginBottom: 16 }}>Early access</div>
+        <div className="h-eyebrow" style={{ marginBottom: 16 }}>Get in touch</div>
         <h2 className="h-display" style={{ fontSize: 'clamp(36px, 5vw, 64px)', margin: '0 auto', maxWidth: 800 }}>
           Ready to protect your team from the{' '}
           <em style={{
@@ -240,11 +245,11 @@ function FinalCTA() {
           scam?
         </h2>
         <p style={{ fontSize: 17, color: 'var(--fg-muted)', maxWidth: 520, margin: '20px auto 0', lineHeight: 1.6 }}>
-          We're onboarding our first partners. Get priority pricing and direct input into what we build.
+          We're in the research phase and talking to businesses. Reach out — your input shapes what we build.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 36, flexWrap: 'wrap' }}>
-          <button className="btn btn-primary btn-xl">Join early access <Icon.Arrow size={16} /></button>
-          <button className="btn btn-ghost btn-xl">Talk to founders</button>
+          <button className="btn btn-primary btn-xl" onClick={onContact}>Get in touch <Icon.Arrow size={16} /></button>
+          <button className="btn btn-ghost btn-xl" onClick={onContact}>Talk to founders</button>
         </div>
       </div>
     </section>
@@ -298,7 +303,7 @@ function BackedBy() {
   )
 }
 
-function Footer() {
+function Footer({ onContact }) {
   return (
     <footer className="foot-pad footer-row" style={{
       borderTop: '1px solid var(--border)',
@@ -316,7 +321,11 @@ function Footer() {
         >
           <LinkedInIcon size={13} /> LinkedIn
         </a>
-        {['Contact', 'Privacy', 'Security'].map(l => (
+        <button onClick={onContact} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontSize: 13, color: 'var(--fg-muted)', fontFamily: 'inherit' }}
+          onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}
+        >Contact</button>
+        {['Privacy', 'Security'].map(l => (
           <a key={l} href="#" style={{ textDecoration: 'none', color: 'var(--fg-muted)' }}
             onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
             onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}

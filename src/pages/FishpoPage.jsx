@@ -2,25 +2,29 @@ import React from 'react'
 import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
+import ContactModal from '../components/ContactModal'
 import { FraudaMark, Icon, StatusDot, GridBg, LinkedInIcon, FraudaWordmark } from '../components/Brand'
 import FishpoDemo from '../components/FishpoDemo'
 import DashboardDemo from '../components/DashboardDemo'
 
 export default function FishpoPage({ theme, onToggleTheme }) {
   const [modal, setModal] = React.useState(null)
+  const [showContact, setShowContact] = React.useState(false)
+  const openContact = () => setShowContact(true)
+  const closeContact = () => setShowContact(false)
 
   return (
     <div className="page-wrap" style={{ width: '100%', minHeight: '100vh', background: 'var(--bg)', color: 'var(--fg)' }}>
-      <Nav theme={theme} onToggleTheme={onToggleTheme} />
-      <Hero onOpenDemo={() => setModal('demo')} onOpenDashboard={() => setModal('dashboard')} />
+      <Nav theme={theme} onToggleTheme={onToggleTheme} onContact={openContact} />
+      <Hero onOpenDemo={() => setModal('demo')} onOpenDashboard={() => setModal('dashboard')} onContact={openContact} />
       <ThreatCounter />
       <Solution />
       <DemoCTA onOpenDemo={() => setModal('demo')} onOpenDashboard={() => setModal('dashboard')} />
       <Pillars />
       <ComparisonTable />
       <FAQSection />
-      <FinalCTA />
-      <Footer />
+      <FinalCTA onContact={openContact} />
+      <Footer onContact={openContact} />
       {modal && (
         <Modal
           title={modal === 'demo' ? 'Fishpo — detection video' : 'Fishpo — admin console video'}
@@ -30,11 +34,12 @@ export default function FishpoPage({ theme, onToggleTheme }) {
           {modal === 'dashboard' && <DashboardDemo />}
         </Modal>
       )}
+      {showContact && <ContactModal onClose={closeContact} />}
     </div>
   )
 }
 
-function Hero({ onOpenDemo }) {
+function Hero({ onOpenDemo, onContact }) {
   return (
     <section className="hero-sect" style={{ position: 'relative', overflow: 'hidden' }}>
       <GridBg opacity={0.5} />
@@ -77,8 +82,8 @@ function Hero({ onOpenDemo }) {
           <button className="btn btn-primary btn-xl" onClick={onOpenDemo}>
             <Icon.Play size={14} /> Watch the demo
           </button>
-          <button className="btn btn-ghost btn-xl">
-            Join the pilot <Icon.Arrow size={16} />
+          <button className="btn btn-ghost btn-xl" onClick={onContact}>
+            Get in touch <Icon.Arrow size={16} />
           </button>
         </div>
         <div className="gdpr-trust">
@@ -316,7 +321,7 @@ function FAQSection() {
   )
 }
 
-function FinalCTA() {
+function FinalCTA({ onContact }) {
   return (
     <section className="section" style={{ textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
       <div aria-hidden="true" style={{
@@ -325,23 +330,23 @@ function FinalCTA() {
         pointerEvents: 'none',
       }} />
       <div className="inner" style={{ position: 'relative' }}>
-        <div className="h-eyebrow" style={{ marginBottom: 16 }}>Join the pilot</div>
+        <div className="h-eyebrow" style={{ marginBottom: 16 }}>Get in touch</div>
         <h2 className="h-display" style={{ fontSize: 'clamp(36px, 5vw, 64px)', margin: '0 auto', maxWidth: 800 }}>
           Ready to stop the next scam before it reaches your team?
         </h2>
         <p style={{ fontSize: 17, color: 'var(--fg-muted)', maxWidth: 520, margin: '20px auto 0', lineHeight: 1.6 }}>
-          We're onboarding our first Fishpo pilot partners. Priority pricing. Direct input into what we build.
+          We're in the research phase and talking to businesses. Reach out — your input shapes what we build.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 36, flexWrap: 'wrap' }}>
-          <button className="btn btn-primary btn-xl">Join Fishpo pilot <Icon.Arrow size={16} /></button>
-          <button className="btn btn-ghost btn-xl">Talk to founders</button>
+          <button className="btn btn-primary btn-xl" onClick={onContact}>Get in touch <Icon.Arrow size={16} /></button>
+          <button className="btn btn-ghost btn-xl" onClick={onContact}>Talk to founders</button>
         </div>
       </div>
     </section>
   )
 }
 
-function Footer() {
+function Footer({ onContact }) {
   return (
     <footer className="foot-pad footer-row" style={{
       borderTop: '1px solid var(--border)',
@@ -359,7 +364,11 @@ function Footer() {
         >
           <LinkedInIcon size={13} /> LinkedIn
         </a>
-        {['Contact', 'Privacy', 'Security'].map(l => (
+        <button onClick={onContact} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontSize: 13, color: 'var(--fg-muted)', fontFamily: 'inherit' }}
+          onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}
+        >Contact</button>
+        {['Privacy', 'Security'].map(l => (
           <a key={l} href="#" style={{ textDecoration: 'none', color: 'var(--fg-muted)' }}
             onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
             onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}

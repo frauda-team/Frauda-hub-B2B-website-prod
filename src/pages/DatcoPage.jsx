@@ -1,23 +1,28 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
+import ContactModal from '../components/ContactModal'
 import { FraudaMark, Icon, StatusDot, GridBg, LinkedInIcon, FraudaWordmark } from '../components/Brand'
 
 export default function DatcoPage({ theme, onToggleTheme }) {
+  const [showContact, setShowContact] = React.useState(false)
+  const openContact = () => setShowContact(true)
+  const closeContact = () => setShowContact(false)
   return (
     <div className="page-wrap" style={{ width: '100%', minHeight: '100vh', background: 'var(--bg)', color: 'var(--fg)' }}>
-      <Nav theme={theme} onToggleTheme={onToggleTheme} />
-      <Hero />
+      <Nav theme={theme} onToggleTheme={onToggleTheme} onContact={openContact} />
+      <Hero onContact={openContact} />
       <HowItWorks />
       <UseCases />
       <FAQSection />
-      <FinalCTA />
-      <Footer />
+      <FinalCTA onContact={openContact} />
+      <Footer onContact={openContact} />
+      {showContact && <ContactModal onClose={closeContact} />}
     </div>
   )
 }
 
-function Hero() {
+function Hero({ onContact }) {
   return (
     <section className="hero-sect" style={{ position: 'relative', overflow: 'hidden' }}>
       <GridBg opacity={0.5} />
@@ -66,8 +71,8 @@ function Hero() {
           >
             <Icon.Play size={14} /> Try the live demo
           </a>
-          <button className="btn btn-ghost btn-xl">
-            Request access <Icon.Arrow size={16} />
+          <button className="btn btn-ghost btn-xl" onClick={onContact}>
+            Get in touch <Icon.Arrow size={16} />
           </button>
         </div>
         <div className="gdpr-trust">
@@ -212,7 +217,7 @@ function FAQSection() {
   )
 }
 
-function FinalCTA() {
+function FinalCTA({ onContact }) {
   return (
     <section className="section" style={{ textAlign: 'center', position: 'relative', overflow: 'hidden', background: 'var(--bg-soft)' }}>
       <div aria-hidden="true" style={{
@@ -243,14 +248,14 @@ function FinalCTA() {
           >
             <Icon.Play size={14} /> Try the live demo
           </a>
-          <button className="btn btn-ghost btn-xl">Talk to founders</button>
+          <button className="btn btn-ghost btn-xl" onClick={onContact}>Talk to founders</button>
         </div>
       </div>
     </section>
   )
 }
 
-function Footer() {
+function Footer({ onContact }) {
   return (
     <footer className="foot-pad footer-row" style={{
       borderTop: '1px solid var(--border)',
@@ -268,7 +273,11 @@ function Footer() {
         >
           <LinkedInIcon size={13} /> LinkedIn
         </a>
-        {['Contact', 'Privacy', 'Security'].map(l => (
+        <button onClick={onContact} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontSize: 13, color: 'var(--fg-muted)', fontFamily: 'inherit' }}
+          onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}
+        >Contact</button>
+        {['Privacy', 'Security'].map(l => (
           <a key={l} href="#" style={{ textDecoration: 'none', color: 'var(--fg-muted)' }}
             onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
             onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}
