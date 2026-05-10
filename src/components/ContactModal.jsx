@@ -110,26 +110,23 @@ function LinkedInCard() {
 }
 
 function EmailCard() {
-  const [copied, setCopied] = React.useState(false)
-  const email = 'team@frauda.io'
-
-  const handleCopy = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    navigator.clipboard.writeText(email).then(() => {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    })
-  }
-
+  const [hovered, setHovered] = React.useState(false)
   return (
-    <div style={{
-      display: 'flex', alignItems: 'flex-start', gap: 16,
-      padding: '16px 18px',
-      borderRadius: 'var(--r-md)',
-      border: '1px solid var(--border)',
-      flexWrap: 'wrap',
-    }}>
+    <a
+      href="mailto:team@frauda.io"
+      style={{
+        textDecoration: 'none',
+        display: 'flex', alignItems: 'center', gap: 16,
+        padding: '16px 18px',
+        borderRadius: 'var(--r-md)',
+        border: '1px solid var(--border)',
+        background: hovered ? 'var(--bg-soft)' : 'transparent',
+        transition: 'background .12s',
+        cursor: 'pointer',
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
       <div style={{
         width: 44, height: 44, borderRadius: 10,
         background: 'var(--accent-soft)',
@@ -138,50 +135,11 @@ function EmailCard() {
       }}>
         <Icon.Mail size={20} />
       </div>
-      <div style={{ flex: 1, minWidth: 160 }}>
+      <div style={{ flex: 1 }}>
         <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--fg)' }}>Email</div>
-        <div style={{ fontSize: 13, color: 'var(--fg-muted)', marginTop: 3, marginBottom: 10 }}>{email}</div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <ActionBtn href={`mailto:${email}`} label="Open in mail" title="Open in mail client">
-            <Icon.Arrow size={13} />
-          </ActionBtn>
-          <ActionBtn onClick={handleCopy} label={copied ? 'Copied!' : 'Copy address'} title="Copy email address">
-            {copied ? <Icon.Check size={13} /> : <CopyIcon />}
-          </ActionBtn>
-        </div>
+        <div style={{ fontSize: 13, color: 'var(--fg-muted)', marginTop: 3 }}>team@frauda.io</div>
       </div>
-    </div>
-  )
-}
-
-function ActionBtn({ href, onClick, label, title, children }) {
-  const [hovered, setHovered] = React.useState(false)
-  const style = {
-    display: 'inline-flex', alignItems: 'center', gap: 5,
-    padding: '7px 12px', borderRadius: 8,
-    border: '1px solid var(--border)',
-    background: hovered ? 'var(--bg-soft)' : 'transparent',
-    color: 'var(--fg-muted)', fontSize: 12, fontWeight: 500,
-    cursor: 'pointer', textDecoration: 'none',
-    fontFamily: 'var(--font-sans)',
-    transition: 'background .12s',
-    whiteSpace: 'nowrap',
-  }
-  const handlers = {
-    onMouseEnter: () => setHovered(true),
-    onMouseLeave: () => setHovered(false),
-  }
-  if (href) {
-    return <a href={href} style={style} title={title} {...handlers}>{children}{label}</a>
-  }
-  return <button onClick={onClick} style={style} title={title} {...handlers}>{children}{label}</button>
-}
-
-function CopyIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="4.5" y="4.5" width="7" height="7" rx="1.5" />
-      <path d="M1.5 8.5V2a.5.5 0 0 1 .5-.5h6.5" />
-    </svg>
+      <Icon.Arrow size={13} style={{ color: 'var(--fg-faint)', flexShrink: 0 }} />
+    </a>
   )
 }
