@@ -17,7 +17,6 @@ export default function FishpoPage({ theme, onToggleTheme }) {
     <div className="page-wrap" style={{ width: '100%', minHeight: '100vh', background: 'var(--bg)', color: 'var(--fg)' }}>
       <Nav theme={theme} onToggleTheme={onToggleTheme} onContact={openContact} />
       <Hero onOpenDemo={() => setModal('demo')} onOpenDashboard={() => setModal('dashboard')} onContact={openContact} />
-      <ThreatCounter />
       <Solution />
       <DemoCTA onOpenDemo={() => setModal('demo')} onOpenDashboard={() => setModal('dashboard')} />
       <Pillars />
@@ -55,7 +54,7 @@ function Hero({ onOpenDemo, onContact }) {
             A Frauda Hub product
           </Link>
           <div className="chip chip-accent">
-            <StatusDot tone="ok" /> Pilot open
+            <StatusDot tone="ok" /> Seeking first pilots
           </div>
         </div>
 
@@ -89,7 +88,6 @@ function Hero({ onOpenDemo, onContact }) {
         <div className="gdpr-trust">
           <span><Icon.Lock size={11} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />GDPR-compliant</span>
           <span>EU data only</span>
-          <span>No credit card required</span>
           <span>Inference runs on-device</span>
         </div>
       </div>
@@ -220,32 +218,14 @@ function Pillars() {
   )
 }
 
-function ThreatCounter() {
-  const [count, setCount] = React.useState(284_729)
-  React.useEffect(() => {
-    const id = setInterval(() => setCount(c => c + 1), 2000)
-    return () => clearInterval(id)
-  }, [])
-  return (
-    <div className="threat-counter">
-      <div style={{ fontSize: 'clamp(36px, 5vw, 60px)', fontFamily: 'var(--font-display)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1 }}>
-        {count.toLocaleString('en-EU')}
-      </div>
-      <div style={{ fontSize: 15, marginTop: 8, opacity: 0.85, letterSpacing: '-0.01em' }}>
-        phishing emails blocked this month
-      </div>
-    </div>
-  )
-}
-
 function ComparisonTable() {
   const rows = [
-    ['Detection speed',         'Hours',    '24 h+',    '<60 sec'],
-    ['AI-generated scams',      '✗',        '✗',        '✓'],
-    ['False positives',         '8–12 %',   '—',        '<0.5 %'],
-    ['Deploy time',             'Days',     '—',        '30 min'],
-    ['On-device inference',     '✗',        '—',        '✓'],
-    ['GDPR · EU-only data',     'Varies',   '—',        '✓'],
+    ['Detection speed',         'Minutes',  'Minutes',  '<60 sec'],
+    ['AI-generated scams',      'Partial',  'Partial',  '✓'],
+    ['False positives',         '2–5 %',    '3–7 %',    '<0.5 %'],
+    ['Deploy time',             'Days',     'Days',     '30 min'],
+    ['On-device inference',     '✗',        '✗',        '✓'],
+    ['GDPR · EU-only data',     'Partial',  'Partial',  '✓'],
   ]
   return (
     <section className="section" style={{ background: 'var(--bg-soft)' }}>
@@ -259,8 +239,8 @@ function ComparisonTable() {
             <thead>
               <tr>
                 <th style={{ textAlign: 'left' }}>Feature</th>
-                <th>Legacy filter</th>
-                <th>Manual review</th>
+                <th>Proofpoint</th>
+                <th>Mimecast</th>
                 <th className="col-fishpo">Fishpo</th>
               </tr>
             </thead>
@@ -371,12 +351,6 @@ function Footer({ onContact }) {
           onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
           onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}
         >Contact</button>
-        {['Privacy', 'Security'].map(l => (
-          <a key={l} href="#" style={{ textDecoration: 'none', color: 'var(--fg-muted)' }}
-            onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
-            onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}
-          >{l}</a>
-        ))}
       </div>
     </footer>
   )

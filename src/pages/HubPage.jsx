@@ -74,7 +74,7 @@ function Hero({ onContact }) {
         <div className="gdpr-trust">
           <span><Icon.Lock size={11} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />GDPR-compliant</span>
           <span>EU data only</span>
-          <span>Pilot open · 12 EU SMEs onboarded</span>
+          <span>Seeking first pilots</span>
         </div>
       </div>
     </section>
@@ -85,7 +85,7 @@ function TrustBar() {
   const items = [
     { icon: <Icon.Shield size={13} />, text: 'Backed by RTU & University of Latvia' },
     { icon: <Icon.Lock size={13} />,   text: 'GDPR-compliant · EU data only' },
-    { icon: <StatusDot tone="ok" />,   text: 'Pilot open — 12 EU SMEs' },
+    { icon: <StatusDot tone="ok" />,   text: 'Seeking first pilots' },
     { icon: <Icon.Chip size={13} />,   text: 'Built on RTU RUDENS HPC' },
   ]
   return (
@@ -103,7 +103,7 @@ function Portfolio() {
   const products = [
     {
       tag: 'Fishpo',
-      status: 'Pilot open',
+      status: 'Seeking first pilots',
       title: 'Email scam shield',
       desc: 'Real-time phishing & AI-generated scam detection inside Outlook and Gmail. Built for SMEs that can\'t staff a 24/7 SOC.',
       cta: 'Explore Fishpo',
@@ -194,6 +194,9 @@ function Problem() {
             </div>
           ))}
         </div>
+        <p style={{ fontSize: 12, color: 'var(--fg-muted)', marginTop: 20, lineHeight: 1.5 }}>
+          Sources: ENISA Threat Landscape 2024 · Verizon DBIR 2024 · Europol IOCTA 2024
+        </p>
       </div>
     </section>
   )
@@ -259,7 +262,7 @@ function InstitutionLogos() {
   const logos = [
     { src: '/logo-rtu.png', alt: 'Riga Technical University', label: 'Riga Technical University' },
     { src: '/logo-ul.png',  alt: 'University of Latvia',      label: 'University of Latvia' },
-    { src: '/logo-ba.png',  alt: 'BA School of Business and Finance', label: 'BA School of Business' },
+    { src: '/logo-ba.png',  alt: 'BA School of Business and Finance', label: 'BA School of Business and Finance' },
   ]
 
   return (
@@ -290,7 +293,7 @@ function BackedBy() {
       <div className="inner" style={{ textAlign: 'center' }}>
         <div className="h-eyebrow" style={{ marginBottom: 28 }}>Institutional backing</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 48, justifyContent: 'center', flexWrap: 'wrap' }}>
-          {['Riga Technical University', 'University of Latvia', 'Banku Augstskola'].map(n => (
+          {['Riga Technical University', 'University of Latvia', 'BA School of Business and Finance'].map(n => (
             <span key={n} style={{
               fontSize: 16, color: 'var(--fg)',
               fontFamily: 'var(--font-display)', fontWeight: 600, letterSpacing: '-0.01em',
@@ -328,12 +331,6 @@ function Footer({ onContact }) {
           onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
           onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}
         >Contact</button>
-        {['Privacy', 'Security'].map(l => (
-          <a key={l} href="#" style={{ textDecoration: 'none', color: 'var(--fg-muted)' }}
-            onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
-            onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}
-          >{l}</a>
-        ))}
       </div>
     </footer>
   )

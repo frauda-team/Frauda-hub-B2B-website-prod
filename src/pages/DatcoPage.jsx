@@ -280,12 +280,6 @@ function Footer({ onContact }) {
           onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
           onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}
         >Contact</button>
-        {['Privacy', 'Security'].map(l => (
-          <a key={l} href="#" style={{ textDecoration: 'none', color: 'var(--fg-muted)' }}
-            onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
-            onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-muted)'}
-          >{l}</a>
-        ))}
       </div>
     </footer>
   )
