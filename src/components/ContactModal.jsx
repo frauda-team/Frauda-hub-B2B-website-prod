@@ -65,6 +65,7 @@ export default function ContactModal({ onClose }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <LinkedInCard />
           <EmailCard />
+          <PhoneCard />
         </div>
       </div>
     </div>,
@@ -106,6 +107,71 @@ function LinkedInCard() {
       </div>
       <Icon.Arrow size={13} style={{ color: 'var(--fg-faint)', flexShrink: 0 }} />
     </a>
+  )
+}
+
+function PhoneCard() {
+  const [hovered, setHovered] = React.useState(false)
+  const [copied, setCopied] = React.useState(false)
+  const phone = '+371 27 08 03 03'
+
+  function handleCopy(e) {
+    e.preventDefault()
+    navigator.clipboard.writeText(phone).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }).catch(() => {
+      // fallback for browsers without clipboard API
+      const el = document.createElement('textarea')
+      el.value = phone
+      el.style.position = 'fixed'
+      el.style.opacity = '0'
+      document.body.appendChild(el)
+      el.select()
+      document.execCommand('copy')
+      document.body.removeChild(el)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
+
+  return (
+    <button
+      onClick={handleCopy}
+      style={{
+        textDecoration: 'none',
+        display: 'flex', alignItems: 'center', gap: 16,
+        padding: '16px 18px',
+        borderRadius: 'var(--r-md)',
+        border: '1px solid var(--border)',
+        background: hovered ? 'var(--bg-soft)' : 'transparent',
+        transition: 'background .12s',
+        cursor: 'pointer',
+        width: '100%',
+        textAlign: 'left',
+        fontFamily: 'inherit',
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div style={{
+        width: 44, height: 44, borderRadius: 10,
+        background: 'var(--accent-soft)',
+        display: 'grid', placeItems: 'center',
+        color: 'var(--accent)', flexShrink: 0,
+      }}>
+        <svg viewBox="0 0 24 24" width={20} height={20} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.23h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.02z"/>
+        </svg>
+      </div>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--fg)' }}>Phone</div>
+        <div style={{ fontSize: 13, color: 'var(--fg-muted)', marginTop: 3 }}>{phone}</div>
+      </div>
+      <div style={{ fontSize: 12, color: copied ? 'var(--accent)' : 'var(--fg-faint)', flexShrink: 0, transition: 'color .12s' }}>
+        {copied ? 'Copied!' : 'Tap to copy'}
+      </div>
+    </button>
   )
 }
 
