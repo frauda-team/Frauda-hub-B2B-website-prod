@@ -3,6 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "description": "Marketing site for Frauda Hub (frauda.io) — landing + product pages for Fishpo and Datco.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frauda-team/Frauda-hub-B2B-website-dev.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
