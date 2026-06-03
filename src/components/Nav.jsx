@@ -3,9 +3,9 @@ import { Link, useLocation } from 'react-router-dom'
 import { FraudaWordmark, FraudaMark, Icon, LinkedInIcon } from './Brand'
 
 const LINKS = [
-  { label: 'Hub',    path: '/hub' },
-  { label: 'Fishpo', path: '/fishpo' },
-  { label: 'Datco',  path: '/datco' },
+  { label: 'Hub',      path: '/hub' },
+  { label: 'Fishpo',   path: '/fishpo' },
+  { label: 'About Us', path: '/about' },
 ]
 
 export default function Nav({ theme, onToggleTheme, onContact }) {

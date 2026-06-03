@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import HubPage from './pages/HubPage'
 import FishpoPage from './pages/FishpoPage'
 import DatcoPage from './pages/DatcoPage'
+import AboutPage from './pages/AboutPage'
 
 export default function App() {
   const [theme, setTheme] = React.useState('light')
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/hub"    element={<HubPage    {...props} />} />
         <Route path="/fishpo" element={<FishpoPage {...props} />} />
         <Route path="/datco"  element={<DatcoPage  {...props} />} />
+        <Route path="/about"  element={<AboutPage  {...props} />} />
       </Routes>
     </BrowserRouter>
   )
