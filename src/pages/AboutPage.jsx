@@ -1,7 +1,74 @@
 import React from 'react'
 import Nav from '../components/Nav'
 import ContactModal from '../components/ContactModal'
+import Timeline from '../components/Timeline'
 import { FraudaWordmark, Icon, LinkedInIcon } from '../components/Brand'
+
+const TIMELINE = [
+  {
+    date: '2026-02-09',
+    title: 'Start of HPC Challenge',
+    description: 'Frauda Hub began as a project for the RTU High-Performance Computing Challenge.',
+    link: null,
+    photos: ['2026-02-09_hpc-start-1.png'],
+  },
+  {
+    date: '2026-03-17',
+    title: 'Mākslīgā Intelekta Diena 2026',
+    description: 'Participated in the AI Day conference. Dialogue with Guna Puce on fraud prevention in the Baltics.',
+    link: 'https://www.linkedin.com/in/guna-puce-ex-paidere-7b02a056/',
+    photos: ['2026-03-17_mi-diena-1.png'],
+  },
+  {
+    date: '2026-04-09',
+    title: 'Start of FinQuest Coopetition',
+    description: 'Entered the FinQuest financial technology coopetition.',
+    link: null,
+    photos: ['2026-04-09_finquest-start-1.png'],
+  },
+  {
+    date: '2026-04-13',
+    title: 'HPC Challenge — Final Pitch',
+    description: 'Presented Frauda Hub at the RTU HPC Challenge final.',
+    link: null,
+    photos: ['2026-04-13_hpc-final-1.png'],
+  },
+  {
+    date: '2026-04-14',
+    title: 'Frauda on TV3',
+    description: 'Featured on Latvian national television TV3 — coverage of student-built digital solutions for real-world problems.',
+    link: 'https://tv3.lv/zinas/zinatne-un-tehnologijas/no-krapnieku-kersanas-lidz-marsrutu-planosanai-studenti-izstradajusi-digitalus-risinajumiem-realam-problemam/',
+    photos: ['2026-04-14_tv3-1.png'],
+  },
+  {
+    date: '2026-04-22',
+    title: 'Frauda on LTV1',
+    description: 'Featured on LTV1 national broadcast — RTU students develop a tool for scam detection.',
+    link: 'https://www.lsm.lv/raksts/dzive-stils/tehnologijas-un-zinatne/26.05.2026-rtu-studenti-izstrada-riku-krapnieku-atpazisanai.a647232/',
+    photos: ['2026-04-22_ltv1-1.png'],
+  },
+  {
+    date: '2026-05-11',
+    title: 'FinQuest Final — Top 5',
+    description: 'Reached the top 5 out of 72 teams at the FinQuest Coopetition final.',
+    link: null,
+    photos: ['2026-05-11_finquest-final-1.png'],
+  },
+  {
+    date: '2026-05-13',
+    title: 'FinTech Baltic Days',
+    description: 'Volunteered at FinTech Baltic Days — networking with the Baltic fintech ecosystem.',
+    link: null,
+    photos: ['2026-05-13_fintech-baltic-1.png'],
+  },
+  {
+    date: '2026-05-14',
+    title: 'DeepTech Conference',
+    description: 'Attended the DeepTech Atelier conference in Riga (May 14–15).',
+    link: null,
+    photos: ['2026-05-14_deeptech-1.png'],
+  },
+]
 
 export default function AboutPage({ theme, onToggleTheme }) {
   const [showContact, setShowContact] = React.useState(false)
@@ -14,6 +81,7 @@ export default function AboutPage({ theme, onToggleTheme }) {
       <TeamSection />
       <AcademicBacking />
       <SocialProofQuote />
+      <OurStory />
       <Footer onContact={openContact} />
       {showContact && <ContactModal onClose={closeContact} />}
     </div>
@@ -194,6 +262,20 @@ function SocialProofQuote() {
             </footer>
           </blockquote>
         </div>
+      </div>
+    </section>
+  )
+}
+
+function OurStory() {
+  return (
+    <section className="section" style={{ background: 'var(--bg-soft)' }}>
+      <div className="inner">
+        <div className="h-eyebrow" style={{ marginBottom: 16 }}>Our story so far</div>
+        <h2 className="h-display" style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', margin: '0 0 48px' }}>
+          From university project to fraud prevention startup.
+        </h2>
+        <Timeline events={TIMELINE} />
       </div>
     </section>
   )
