@@ -13,10 +13,11 @@ export default function HubPage({ theme, onToggleTheme }) {
       <Nav theme={theme} onToggleTheme={onToggleTheme} onContact={openContact} />
       <Hero onContact={openContact} />
       <TrustBar />
+      <Portfolio />
       <Problem />
-      <FishpoTeaser />
-      <FromTheLab />
+      <Team onContact={openContact} />
       <FinalCTA onContact={openContact} />
+      <BackedBy />
       <Footer onContact={openContact} />
       {showContact && <ContactModal onClose={closeContact} />}
     </div>
@@ -36,7 +37,7 @@ function Hero({ onContact }) {
         <div className="hero-badge" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32, flexWrap: 'wrap' }}>
           <FraudaMark size={66} />
           <div className="chip chip-accent">
-            <StatusDot tone="ok" /> Seeking free pilots
+            <StatusDot tone="ok" /> Private beta · EU only
           </div>
         </div>
 
@@ -56,21 +57,24 @@ function Hero({ onContact }) {
           maxWidth: 580, marginTop: 28,
         }}>
           Frauda Hub builds AI-powered fraud-prevention tools for European SMEs.
-          Our flagship product Fishpo stops phishing emails before anyone clicks.
+          Two focused products. One mission: stop fraud at the source.
         </p>
 
         <div className="hero-cta" style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap' }}>
-          <Link to="/fishpo" className="btn btn-primary btn-xl" style={{ textDecoration: 'none' }}>
-            Explore Fishpo <Icon.Arrow size={16} />
-          </Link>
-          <button className="btn btn-ghost btn-xl" onClick={onContact}>
-            Get in touch
-          </button>
+          <button className="btn btn-primary btn-xl" onClick={onContact}>Get in touch <Icon.Arrow size={16} /></button>
+          <a
+            href="https://www.linkedin.com/company/frauda-hub/posts/?feedView=all"
+            target="_blank" rel="noopener noreferrer"
+            className="btn btn-ghost btn-xl"
+            style={{ textDecoration: 'none' }}
+          >
+            <LinkedInIcon size={16} /> Follow on LinkedIn
+          </a>
         </div>
         <div className="gdpr-trust">
           <span><Icon.Lock size={11} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />GDPR-compliant</span>
           <span>EU data only</span>
-          <span>Free pilot available</span>
+          <span>Seeking first pilots</span>
         </div>
       </div>
     </section>
@@ -81,7 +85,7 @@ function TrustBar() {
   const items = [
     { icon: <Icon.Shield size={13} />, text: 'Backed by RTU & University of Latvia' },
     { icon: <Icon.Lock size={13} />,   text: 'GDPR-compliant · EU data only' },
-    { icon: <StatusDot tone="ok" />,   text: 'Free pilot available' },
+    { icon: <StatusDot tone="ok" />,   text: 'Seeking first pilots' },
     { icon: <Icon.Chip size={13} />,   text: 'Built on RTU RUDENS HPC' },
   ]
   return (
@@ -92,6 +96,71 @@ function TrustBar() {
         ))}
       </div>
     </div>
+  )
+}
+
+function Portfolio() {
+  const products = [
+    {
+      tag: 'Fishpo',
+      status: 'Seeking first pilots',
+      title: 'Email scam shield',
+      desc: 'Real-time phishing & AI-generated scam detection inside Outlook and Gmail. Built for SMEs that can\'t staff a 24/7 SOC.',
+      cta: 'Explore Fishpo',
+      to: '/fishpo',
+    },
+    {
+      tag: 'Datco',
+      status: 'Live demo',
+      title: 'Synthetic data for FinTech',
+      desc: 'Answer 6 questions, get a compliant synthetic dataset for fraud, credit, AML or payment models — generated on RTU RUDENS HPC.',
+      cta: 'Explore Datco',
+      to: '/datco',
+    },
+  ]
+
+  return (
+    <section className="section" style={{ background: 'var(--bg-soft)' }}>
+      <div className="inner">
+        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 16 }}>
+          <div>
+            <div className="h-eyebrow" style={{ marginBottom: 12 }}>Frauda Hub portfolio</div>
+            <h2 className="h-display" style={{ fontSize: 'clamp(36px, 4vw, 56px)', margin: 0 }}>
+              Two tools. One mission.
+            </h2>
+          </div>
+          <p style={{ fontSize: 16, color: 'var(--fg-muted)', maxWidth: 380, lineHeight: 1.6 }}>
+            Each product in the Frauda Hub portfolio is an independent company — purpose-built for a specific fraud vector.
+          </p>
+        </div>
+
+        <div className="grid-2 hero-cards" style={{ marginTop: 48 }}>
+          {products.map(p => (
+            <div key={p.tag} className="card" style={{ padding: '40px 36px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span className="product-badge">{p.tag}</span>
+                <span className="chip chip-accent" style={{ fontSize: 11 }}>
+                  <StatusDot tone="ok" /> {p.status}
+                </span>
+              </div>
+
+              <div>
+                <div className="h-display" style={{ fontSize: 'clamp(28px, 3vw, 40px)', marginBottom: 12 }}>{p.title}</div>
+                <div style={{ fontSize: 15, color: 'var(--fg-muted)', lineHeight: 1.65 }}>{p.desc}</div>
+              </div>
+
+              <Link
+                to={p.to}
+                className="btn btn-primary"
+                style={{ alignSelf: 'flex-start', textDecoration: 'none', marginTop: 'auto' }}
+              >
+                {p.cta} <Icon.Arrow size={14} />
+              </Link>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   )
 }
 
@@ -133,116 +202,25 @@ function Problem() {
   )
 }
 
-function FishpoTeaser() {
-  const features = [
-    {
-      icon: <Icon.Bolt size={20} />,
-      title: 'Install',
-      desc: 'Lightweight browser agent. Deploys in under 30 minutes — no IT team required.',
-    },
-    {
-      icon: <Icon.Eye size={20} />,
-      title: 'Detect',
-      desc: 'Local AI model analyses every incoming email in real time. No data leaves your device.',
-    },
-    {
-      icon: <Icon.Shield size={20} />,
-      title: 'Protect',
-      desc: 'Suspected scams are quarantined instantly and your team is alerted before anyone clicks.',
-    },
-  ]
-
-  const ref = React.useRef(null)
-  const [visible, setVisible] = React.useState(false)
-  React.useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) { setVisible(true); obs.disconnect() }
-    }, { threshold: 0.15 })
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
-
+function Team({ onContact }) {
   return (
     <section className="section" style={{ background: 'var(--bg-soft)' }}>
-      <div className="inner" ref={ref}>
-        <div className="h-eyebrow" style={{ marginBottom: 16 }}>Our flagship product</div>
-        <h2 className="h-display" style={{ fontSize: 'clamp(36px, 4vw, 56px)', margin: 0 }}>
-          Fishpo — email scam shield.
-        </h2>
-        <p style={{ fontSize: 17, color: 'var(--fg-muted)', maxWidth: 600, marginTop: 18, lineHeight: 1.6 }}>
-          Real-time phishing detection that runs on-device. No SOC required, no data sent to the cloud.
-          Built for SMEs that need enterprise-grade protection without enterprise complexity.
-        </p>
-
-        <div className="grid-3 fishpo-features" style={{
-          marginTop: 48,
-          opacity: visible ? 1 : 0,
-          transform: visible ? 'none' : 'translateY(20px)',
-          transition: 'opacity 0.5s ease, transform 0.5s ease',
-        }}>
-          {features.map((f, i) => (
-            <div key={f.title} className="card" style={{
-              padding: '32px 28px',
-              opacity: visible ? 1 : 0,
-              transform: visible ? 'none' : 'translateY(20px)',
-              transition: `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`,
-            }}>
-              <div style={{
-                width: 44, height: 44, borderRadius: 'var(--r-md)',
-                background: 'var(--accent-soft)', color: 'var(--accent)',
-                display: 'grid', placeItems: 'center', marginBottom: 20,
-              }}>
-                {f.icon}
-              </div>
-              <div className="h-display" style={{ fontSize: 22, marginBottom: 10 }}>{f.title}</div>
-              <div style={{ fontSize: 15, color: 'var(--fg-muted)', lineHeight: 1.65 }}>{f.desc}</div>
-            </div>
-          ))}
-        </div>
-
-        <div style={{ marginTop: 40 }}>
-          <Link to="/fishpo" className="btn btn-primary" style={{ textDecoration: 'none' }}>
-            Explore Fishpo <Icon.Arrow size={14} />
-          </Link>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function FromTheLab() {
-  return (
-    <section className="section">
       <div className="inner">
-        <div className="h-eyebrow" style={{ marginBottom: 14 }}>From the lab</div>
-        <h2 className="h-display" style={{ fontSize: 'clamp(28px, 3vw, 40px)', margin: 0, color: 'var(--fg-muted)' }}>
-          Exploring new ideas.
-        </h2>
-
-        <div style={{ marginTop: 36, maxWidth: 520 }}>
-          <div className="card" style={{ padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span className="product-badge">Datco</span>
-              <span className="chip chip-accent" style={{ fontSize: 11 }}>
-                <StatusDot tone="ok" /> Live demo
-              </span>
+        <div className="grid-halves">
+          <div>
+            <div className="h-eyebrow" style={{ marginBottom: 14 }}>Built &amp; backed by</div>
+            <h2 className="h-display" style={{ fontSize: 'clamp(32px, 3.5vw, 48px)', margin: 0 }}>
+              Academic roots.<br />Real-world impact.
+            </h2>
+            <p style={{ fontSize: 16, color: 'var(--fg-muted)', maxWidth: 460, marginTop: 18, lineHeight: 1.65 }}>
+              Frauda Hub is developed by a research-driven team with institutional backing
+              from Latvia's top universities and the EU's cyber-resilience initiatives.
+            </p>
+            <div style={{ marginTop: 28, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <button className="btn btn-ghost" onClick={onContact}>Talk to the team <Icon.Arrow size={14} /></button>
             </div>
-            <div>
-              <div className="h-display" style={{ fontSize: 24, marginBottom: 10 }}>Synthetic data for FinTech</div>
-              <div style={{ fontSize: 15, color: 'var(--fg-muted)', lineHeight: 1.65 }}>
-                Answer 6 questions, get a compliant synthetic dataset for fraud, credit, AML or payment models — generated on RTU RUDENS HPC.
-              </div>
-            </div>
-            <Link
-              to="/datco"
-              className="btn btn-ghost"
-              style={{ alignSelf: 'flex-start', textDecoration: 'none' }}
-            >
-              Try Datco demo <Icon.Arrow size={14} />
-            </Link>
           </div>
+          <InstitutionLogos />
         </div>
       </div>
     </section>
@@ -270,10 +248,57 @@ function FinalCTA({ onContact }) {
           scam?
         </h2>
         <p style={{ fontSize: 17, color: 'var(--fg-muted)', maxWidth: 520, margin: '20px auto 0', lineHeight: 1.6 }}>
-          We're offering a free pilot to the first businesses. Reach out — your input shapes what we build.
+          We're in the research phase and talking to businesses. Reach out — your input shapes what we build.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 36, flexWrap: 'wrap' }}>
           <button className="btn btn-primary btn-xl" onClick={onContact}>Get in touch <Icon.Arrow size={16} /></button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function InstitutionLogos() {
+  const logos = [
+    { src: '/logo-rtu.png', alt: 'Riga Technical University', label: 'Riga Technical University' },
+    { src: '/logo-ul.png',  alt: 'University of Latvia',      label: 'University of Latvia' },
+    { src: '/logo-ba.png',  alt: 'BA School of Business and Finance', label: 'BA School of Business and Finance' },
+  ]
+
+  return (
+    <div className="institution-logos-grid">
+      {logos.map(l => <LogoCard key={l.alt} {...l} />)}
+    </div>
+  )
+}
+
+function LogoCard({ src, alt, label }) {
+  return (
+    <div className="card" style={{
+      padding: '20px 16px', display: 'flex', flexDirection: 'column',
+      alignItems: 'center', gap: 12, textAlign: 'center',
+    }}>
+      <img
+        src={src} alt={alt}
+        style={{ width: '100%', maxWidth: 120, height: 72, objectFit: 'contain' }}
+      />
+      <span style={{ fontSize: 12, color: 'var(--fg-muted)', lineHeight: 1.4 }}>{label}</span>
+    </div>
+  )
+}
+
+function BackedBy() {
+  return (
+    <section className="section-sm" style={{ borderTop: '1px solid var(--border)', background: 'var(--bg-soft)' }}>
+      <div className="inner" style={{ textAlign: 'center' }}>
+        <div className="h-eyebrow" style={{ marginBottom: 28 }}>Institutional backing</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 48, justifyContent: 'center', flexWrap: 'wrap' }}>
+          {['Riga Technical University', 'University of Latvia', 'BA School of Business and Finance'].map(n => (
+            <span key={n} style={{
+              fontSize: 16, color: 'var(--fg)',
+              fontFamily: 'var(--font-display)', fontWeight: 600, letterSpacing: '-0.01em',
+            }}>{n}</span>
+          ))}
         </div>
       </div>
     </section>

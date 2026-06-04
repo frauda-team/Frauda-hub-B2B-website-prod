@@ -248,12 +248,6 @@ function ComparisonTable() {
         <h2 className="h-display" style={{ fontSize: 'clamp(32px, 3.5vw, 48px)', margin: 0, maxWidth: 600 }}>
           Not all email security is the same.
         </h2>
-        <div className="table-scroll-hint">
-          <svg viewBox="0 0 24 24" width={12} height={12} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M5 12h14M13 6l6 6-6 6"/>
-          </svg>
-          Scroll to compare
-        </div>
         <div className="table-wrap">
           <table className="cmp-table">
             <thead>
