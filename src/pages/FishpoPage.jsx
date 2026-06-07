@@ -4,36 +4,23 @@ import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
 import ContactModal from '../components/ContactModal'
 import { FraudaMark, Icon, StatusDot, GridBg, LinkedInIcon, FraudaWordmark } from '../components/Brand'
-import FishpoDemo from '../components/FishpoDemo'
-import DashboardDemo from '../components/DashboardDemo'
-
 export default function FishpoPage({ theme, onToggleTheme }) {
-  const [modal, setModal] = React.useState(null)
   const [showContact, setShowContact] = React.useState(false)
   const openContact = () => setShowContact(true)
   const closeContact = () => setShowContact(false)
+  const scrollToDemo = () => document.getElementById('demo-section')?.scrollIntoView({ behavior: 'smooth' })
 
   return (
     <div className="page-wrap" style={{ width: '100%', minHeight: '100vh', background: 'var(--bg)', color: 'var(--fg)' }}>
       <Nav theme={theme} onToggleTheme={onToggleTheme} onContact={openContact} />
-      <Hero onOpenDemo={() => setModal('demo')} onOpenDashboard={() => setModal('dashboard')} onContact={openContact} />
+      <Hero onOpenDemo={scrollToDemo} onContact={openContact} />
       <InteractiveDemo />
       <Solution />
-      <DemoCTA onOpenDemo={() => setModal('demo')} onOpenDashboard={() => setModal('dashboard')} />
       <Pillars />
       <ComparisonTable />
       <FAQSection />
       <FinalCTA onContact={openContact} />
       <Footer onContact={openContact} />
-      {modal && (
-        <Modal
-          title={modal === 'demo' ? 'Fishpo — detection video' : 'Fishpo — admin console video'}
-          onClose={() => setModal(null)}
-        >
-          {modal === 'demo'      && <FishpoDemo />}
-          {modal === 'dashboard' && <DashboardDemo />}
-        </Modal>
-      )}
       {showContact && <ContactModal onClose={closeContact} />}
     </div>
   )
@@ -155,7 +142,7 @@ function Solution() {
 
 function InteractiveDemo() {
   return (
-    <section style={{ paddingTop: 80 }}>
+    <section id="demo-section" style={{ paddingTop: 80 }}>
       <div className="inner" style={{ marginBottom: 36 }}>
         <div className="h-eyebrow" style={{ marginBottom: 16 }}>Try it yourself</div>
         <h2 className="h-display" style={{ fontSize: 'clamp(32px, 3.5vw, 48px)', margin: '0 0 12px' }}>
@@ -173,7 +160,7 @@ function InteractiveDemo() {
         overflow: 'hidden',
       }}>
         <iframe
-          src="https://frauda-team.github.io/fishpo-interactive-demo/"
+          src="https://frauda-team.github.io/fishpo-interactive-demo/?embed=1"
           title="Fishpo interactive email security demo"
           width="100%"
           height="100%"
@@ -185,37 +172,6 @@ function InteractiveDemo() {
   )
 }
 
-function DemoCTA({ onOpenDemo, onOpenDashboard }) {
-  return (
-    <section className="section-sm">
-      <div className="inner">
-        <div className="card demo-cta-card" style={{ padding: '48px 52px' }}>
-          <div>
-            <div className="h-eyebrow" style={{ marginBottom: 14 }}>Product videos</div>
-            <div className="h-display" style={{ fontSize: 'clamp(28px, 3vw, 40px)', maxWidth: 560 }}>
-              See Fishpo stop a phishing attack in 10 seconds — and tour the admin console.
-            </div>
-            <div style={{ fontSize: 15, color: 'var(--fg-muted)', marginTop: 14, maxWidth: 480, lineHeight: 1.6 }}>
-              Two video walkthroughs: the end-user experience and the security team's console. No install or signup.
-            </div>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flexShrink: 0 }}>
-            <button className="btn btn-primary" onClick={onOpenDemo}>
-              <Icon.Play size={12} /> Watch detection video
-            </button>
-            <button className="btn btn-primary" onClick={onOpenDashboard}
-              style={{ background: 'transparent', color: 'var(--accent)', border: '1.5px solid var(--accent)' }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'var(--accent-soft)' }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
-            >
-              <Icon.Play size={12} /> Watch console video
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
 
 function Pillars() {
   const items = [
