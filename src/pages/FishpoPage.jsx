@@ -154,7 +154,7 @@ function InteractiveDemo() {
       </div>
       <div style={{
         width: '100%',
-        height: 720,
+        height: 860,
         borderTop: '1px solid var(--border)',
         borderBottom: '1px solid var(--border)',
         overflow: 'hidden',
