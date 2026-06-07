@@ -18,6 +18,7 @@ export default function FishpoPage({ theme, onToggleTheme }) {
       <Nav theme={theme} onToggleTheme={onToggleTheme} onContact={openContact} />
       <Hero onOpenDemo={() => setModal('demo')} onOpenDashboard={() => setModal('dashboard')} onContact={openContact} />
       <Solution />
+      <InteractiveDemo />
       <DemoCTA onOpenDemo={() => setModal('demo')} onOpenDashboard={() => setModal('dashboard')} />
       <Pillars />
       <ComparisonTable />
@@ -146,6 +147,38 @@ function Solution() {
               <div style={{ fontSize: 15, color: 'var(--fg-muted)', lineHeight: 1.65 }}>{d}</div>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function InteractiveDemo() {
+  return (
+    <section className="section">
+      <div className="inner">
+        <div className="h-eyebrow" style={{ marginBottom: 16 }}>Try it yourself</div>
+        <h2 className="h-display" style={{ fontSize: 'clamp(32px, 3.5vw, 48px)', margin: '0 0 12px' }}>
+          A scam arrives. Watch Fishpo catch it.
+        </h2>
+        <p style={{ fontSize: 15, color: 'var(--fg-muted)', maxWidth: 560, margin: '0 0 36px', lineHeight: 1.65 }}>
+          Live interactive demo — no install, no signup. A suspicious email arrives in 1 second. Click it and see the analysis.
+        </p>
+        <div style={{
+          borderRadius: 'var(--r-xl)',
+          overflow: 'hidden',
+          border: '1px solid var(--border-strong)',
+          boxShadow: 'var(--shadow-pop)',
+          height: 620,
+        }}>
+          <iframe
+            src="https://frauda-team.github.io/fishpo-interactive-demo/"
+            title="Fishpo interactive email security demo"
+            width="100%"
+            height="100%"
+            style={{ display: 'block', border: 'none' }}
+            loading="lazy"
+          />
         </div>
       </div>
     </section>
