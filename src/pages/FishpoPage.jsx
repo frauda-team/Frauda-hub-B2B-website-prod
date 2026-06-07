@@ -8,7 +8,7 @@ export default function FishpoPage({ theme, onToggleTheme }) {
   const [showContact, setShowContact] = React.useState(false)
   const openContact = () => setShowContact(true)
   const closeContact = () => setShowContact(false)
-  const scrollToDemo = () => document.getElementById('demo-section')?.scrollIntoView({ behavior: 'smooth' })
+  const scrollToDemo = () => document.getElementById('demo-section')?.scrollIntoView({ behavior: 'smooth', block: 'end' })
 
   return (
     <div className="page-wrap" style={{ width: '100%', minHeight: '100vh', background: 'var(--bg)', color: 'var(--fg)' }}>
@@ -154,7 +154,7 @@ function InteractiveDemo() {
       </div>
       <div style={{
         width: '100%',
-        height: 860,
+        height: 820,
         borderTop: '1px solid var(--border)',
         borderBottom: '1px solid var(--border)',
         overflow: 'hidden',
