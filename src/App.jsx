@@ -1,5 +1,11 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  React.useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  return null
+}
 import HubPage from './pages/HubPage'
 import FishpoPage from './pages/FishpoPage'
 import DatcoPage from './pages/DatcoPage'
@@ -14,6 +20,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/"       element={<Navigate to="/hub" replace />} />
         <Route path="/hub"    element={<HubPage    {...props} />} />
