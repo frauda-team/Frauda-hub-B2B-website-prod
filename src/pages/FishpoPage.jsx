@@ -142,8 +142,12 @@ function Solution() {
 
 function InteractiveDemo() {
   return (
-    <section id="demo-section" style={{ paddingTop: 80 }}>
-      <div className="inner" style={{ marginBottom: 36 }}>
+    <section id="demo-section" style={{
+      padding: '80px 0',
+      borderTop: '1px solid var(--border)',
+      borderBottom: '1px solid var(--border)',
+    }}>
+      <div className="inner" style={{ marginBottom: 40 }}>
         <div className="h-eyebrow" style={{ marginBottom: 16 }}>Try it yourself</div>
         <h2 className="h-display" style={{ fontSize: 'clamp(32px, 3.5vw, 48px)', margin: '0 0 12px' }}>
           A scam arrives. Watch Fishpo catch it.
@@ -153,11 +157,13 @@ function InteractiveDemo() {
         </p>
       </div>
       <div style={{
-        width: '100%',
+        width: '68%',
+        margin: '0 auto',
         height: 820,
-        borderTop: '1px solid var(--border)',
-        borderBottom: '1px solid var(--border)',
+        borderRadius: 'var(--r-xl)',
         overflow: 'hidden',
+        border: '1px solid var(--border-strong)',
+        boxShadow: 'var(--shadow-pop)',
       }}>
         <iframe
           src="https://frauda-team.github.io/fishpo-interactive-demo/?embed=1"
