@@ -140,7 +140,19 @@ function Solution() {
   )
 }
 
+function useWrapWidth() {
+  function calc() { return window.innerWidth <= 1024 ? '95%' : '68%' }
+  const [w, setW] = React.useState(calc)
+  React.useEffect(() => {
+    const fn = () => setW(calc())
+    window.addEventListener('resize', fn)
+    return () => window.removeEventListener('resize', fn)
+  }, [])
+  return w
+}
+
 function InteractiveDemo() {
+  const wrapWidth = useWrapWidth()
   return (
     <section id="demo-section" style={{
       padding: '80px 0',
@@ -156,7 +168,9 @@ function InteractiveDemo() {
           Live interactive demo — no install, no signup. A suspicious email arrives in 1 second. Click it and watch the analysis.
         </p>
       </div>
-      <div className="demo-iframe-wrap" style={{
+      <div style={{
+        width: wrapWidth,
+        margin: '0 auto',
         height: 820,
         borderRadius: 'var(--r-xl)',
         overflow: 'hidden',
