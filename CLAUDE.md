@@ -72,14 +72,31 @@ All icons live as React components on the `Icon` object exported from `src/compo
 | Local dev | `npm run dev` → http://localhost:5173 |
 | Production build | `npm run build` → emits `dist/` |
 | Preview prod build | `npm run preview` |
-| Deploy to frauda.io | `npm run deploy` (manual; pushes `dist/` to `gh-pages` branch) |
+| Deploy the LIVE site (frauda.io) | `npm run deploy:prod` |
+| Deploy the dev preview site | `npm run deploy:dev` |
 
 `dist/` is gitignored. If you see it tracked, it was added in error — run `git rm -r --cached dist/`.
 
 ## Deploy pipeline
 
-- GitHub Pages serves the `gh-pages` branch with custom domain `frauda.io` (via `public/CNAME`).
-- `npm run deploy` runs `vite build`, then `cp dist/index.html dist/404.html` (a second SPA-fallback approach in addition to `public/404.html`), then `gh-pages -d dist`.
+> [!IMPORTANT]
+> **⚠️ THE LIVE DOMAIN `frauda.io` IS SERVED BY THE `prod` REPO, NOT this `dev` repo.**
+> There are **two** GitHub repos, each with its own `gh-pages` branch and its own `CNAME frauda.io`:
+> - `origin` = `frauda-team/Frauda-hub-B2B-website-dev` — its gh-pages is a **dev preview only; nothing public points at it.**
+> - `prod`   = `frauda-team/Frauda-hub-B2B-website-prod` — **its gh-pages is what `https://frauda.io` actually serves.**
+>
+> **To make a change appear on the live site you MUST run `npm run deploy:prod`.** Running a deploy
+> against the dev repo will silently succeed ("Published") while the live site never changes — this
+> exact trap cost a long debugging session. The bare `npm run deploy` script is intentionally disabled
+> (it errors and points here) so nobody deploys to the wrong place by reflex.
+>
+> Verify a live deploy landed: `curl -s https://frauda.io/<route> | grep -oE 'index-[A-Za-z0-9]+\.js'`
+> and confirm the hash matches `ls dist/assets/`. GitHub Pages CDN takes ~1–2 min to propagate.
+
+- `npm run deploy:prod` / `deploy:dev` run `vite build`, then `cp dist/index.html dist/404.html`
+  (a second SPA-fallback approach in addition to `public/404.html`), then `gh-pages -d dist -r <that repo>`.
+- Source code for both repos is pushed with `git push origin main` (dev) and `git push prod main` (prod);
+  this is **separate** from deploying — pushing `main` does NOT update either `gh-pages`/the live site.
 - There is **no auto-deploy on `main`**. Deploys are manual. Don't add auto-deploy without explicit user approval — see Security below.
 - `.github/workflows/build.yml` runs `npm ci && npm run build` on every push/PR to catch build breakage. It does not deploy.
 

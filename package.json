@@ -15,7 +15,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && cp dist/index.html dist/404.html && gh-pages -d dist"
+    "build:dist": "npm run build && cp dist/index.html dist/404.html",
+    "deploy:dev": "npm run build:dist && gh-pages -d dist -r git@github.com:frauda-team/Frauda-hub-B2B-website-dev.git -f",
+    "deploy:prod": "npm run build:dist && gh-pages -d dist -r git@github.com:frauda-team/Frauda-hub-B2B-website-prod.git -f",
+    "deploy": "echo \"Use deploy:prod (serves frauda.io) or deploy:dev. See CLAUDE.md > Deploy pipeline.\" && exit 1"
   },
   "dependencies": {
     "react": "^18.3.1",
