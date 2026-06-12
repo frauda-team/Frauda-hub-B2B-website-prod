@@ -1,14 +1,20 @@
 import React from 'react'
 import { Icon, StatusDot } from './Brand'
 
-function useIsMobile() {
-  const [v, setV] = React.useState(() => window.innerWidth <= 680)
+function useScreenSize() {
+  function getSize() {
+    const w = window.innerWidth
+    if (w < 600) return 'small'
+    if (w < 900) return 'medium'
+    return 'large'
+  }
+  const [size, setSize] = React.useState(getSize)
   React.useEffect(() => {
-    const fn = () => setV(window.innerWidth <= 680)
+    const fn = () => setSize(getSize())
     window.addEventListener('resize', fn)
     return () => window.removeEventListener('resize', fn)
   }, [])
-  return v
+  return size
 }
 
 const SCRIPT = [
@@ -26,7 +32,7 @@ function currentLabel(t) {
 }
 
 export default function FishpoDemo() {
-  const isMobile = useIsMobile()
+  const size = useScreenSize()
   const [t, setT] = React.useState(0)
   const [playing, setPlaying] = React.useState(true)
   const raf = React.useRef(null)
@@ -63,6 +69,15 @@ export default function FishpoDemo() {
     setPlaying(false)
   }
 
+  // large:  15% sidebar | 20% inbox | 40% email | 25% fishpo  (exact user spec)
+  // medium: 20% inbox | 55% email | 25% fishpo  (sidebar hidden)
+  // small:  60% email | 40% fishpo  (sidebar + inbox hidden)
+  const gridCols = {
+    large:  '15fr 20fr 40fr 25fr',
+    medium: '20fr 55fr 25fr',
+    small:  '60fr 40fr',
+  }[size]
+
   return (
     <div style={{
       width: '100%', height: '100%', background: 'var(--bg-soft)',
@@ -90,11 +105,12 @@ export default function FishpoDemo() {
         </div>
       </div>
 
-      {/* Outlook layout */}
-      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '200px 300px 1fr', flex: 1, minHeight: 0, overflow: 'hidden' }}>
-        {!isMobile && <Sidebar />}
-        {!isMobile && <MailList arrived={arrived} flagged={flagged} quarantined={quarantined} />}
-        <MailReader arrived={arrived} flagged={flagged} verdict={verdict} quarantined={quarantined} />
+      {/* Outlook 4-column layout */}
+      <div style={{ display: 'grid', gridTemplateColumns: gridCols, flex: 1, minHeight: 0, overflow: 'hidden' }}>
+        {size === 'large' && <Sidebar />}
+        {size !== 'small' && <MailList arrived={arrived} flagged={flagged} quarantined={quarantined} />}
+        <MailReader arrived={arrived} flagged={flagged} quarantined={quarantined} />
+        <FishpoPanel arrived={arrived} verdict={verdict} quarantined={quarantined} t={t} />
       </div>
 
       {/* Player bar */}
@@ -204,20 +220,31 @@ function Sidebar() {
     ['Junk', null], ['Archive', null],
   ]
   return (
-    <aside style={{ borderRight: '1px solid var(--border)', padding: '16px 10px', background: 'var(--bg)', fontSize: 14 }}>
-      <div style={{ padding: '8px 12px', fontWeight: 500, color: 'var(--fg-muted)', fontSize: 12, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+    <aside style={{ borderRight: '1px solid var(--border)', padding: '16px 10px', background: 'var(--bg)', fontSize: 13, minWidth: 0, overflow: 'hidden' }}>
+      <div style={{ padding: '8px 10px', fontWeight: 500, color: 'var(--fg-muted)', fontSize: 11, letterSpacing: '0.04em', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
         m.berzins@acme.lv
       </div>
-      <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 1 }}>
         {items.map(([n, c, sel]) => (
           <div key={n} style={{
-            padding: '9px 12px', borderRadius: 7,
+            padding: '8px 10px', borderRadius: 6,
             background: sel ? 'var(--accent-soft)' : 'transparent',
             color: sel ? 'var(--accent)' : 'var(--fg-muted)',
             display: 'flex', justifyContent: 'space-between', fontWeight: sel ? 600 : 400,
+            whiteSpace: 'nowrap',
           }}>
             <span>{n}</span>
-            {c != null && <span style={{ fontSize: 12 }}>{c}</span>}
+            {c != null && <span style={{ fontSize: 11 }}>{c}</span>}
+          </div>
+        ))}
+      </div>
+      {/* filter groups */}
+      <div style={{ marginTop: 18, padding: '0 10px' }}>
+        <div style={{ fontSize: 10.5, fontWeight: 600, color: 'var(--fg-faint)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>Filters</div>
+        {['Newsletters', 'Receipts', 'Alerts'].map(f => (
+          <div key={f} style={{ padding: '6px 0', fontSize: 12, color: 'var(--fg-muted)', display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}>
+            <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--border-strong)', flexShrink: 0 }} />
+            {f}
           </div>
         ))}
       </div>
@@ -232,18 +259,19 @@ function MailList({ arrived, flagged, quarantined }) {
     { from: 'GitHub', subj: '[acme/api] PR #482 ready', preview: 'k.ozols opened a pull request…', time: '08:21', read: true },
   ]
   return (
-    <div style={{ borderRight: '1px solid var(--border)', overflow: 'hidden', background: 'var(--bg-elev)' }}>
+    <div style={{ borderRight: '1px solid var(--border)', overflow: 'hidden', background: 'var(--bg-elev)', minWidth: 0 }}>
       <div style={{
-        padding: '14px 16px', borderBottom: '1px solid var(--border)',
+        padding: '12px 14px', borderBottom: '1px solid var(--border)',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        flexShrink: 0,
       }}>
-        <span style={{ fontSize: 15, fontWeight: 600 }}>Inbox</span>
-        <span style={{ fontSize: 12, color: 'var(--fg-muted)' }}>{12 + (arrived ? 1 : 0)} unread</span>
+        <span style={{ fontSize: 14, fontWeight: 600 }}>Inbox</span>
+        <span style={{ fontSize: 11.5, color: 'var(--fg-muted)' }}>{12 + (arrived ? 1 : 0)}</span>
       </div>
 
       {/* suspicious email */}
       <div style={{
-        padding: '14px 16px', borderBottom: '1px solid var(--border)',
+        padding: '12px 14px', borderBottom: '1px solid var(--border)',
         background: quarantined
           ? 'repeating-linear-gradient(45deg, var(--bg-soft) 0 6px, transparent 6px 12px)'
           : flagged ? 'var(--danger-soft)' : 'var(--accent-soft)',
@@ -252,45 +280,46 @@ function MailList({ arrived, flagged, quarantined }) {
         transition: 'opacity .4s, transform .4s, background .4s',
         position: 'relative',
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, gap: 4 }}>
           <span style={{
             fontWeight: 600,
             color: quarantined ? 'var(--fg-muted)' : 'var(--fg)',
             textDecoration: quarantined ? 'line-through' : 'none',
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
           }}>Microsoft Billing</span>
-          <span style={{ fontSize: 12, color: 'var(--fg-muted)' }}>09:23</span>
+          <span style={{ fontSize: 11, color: 'var(--fg-muted)', flexShrink: 0 }}>09:23</span>
         </div>
-        <div style={{ fontSize: 13.5, fontWeight: 500, marginTop: 5, color: quarantined ? 'var(--fg-muted)' : 'var(--fg)' }}>
-          URGENT: Your Microsoft 365 license…
+        <div style={{ fontSize: 12.5, fontWeight: 500, marginTop: 4, color: quarantined ? 'var(--fg-muted)' : 'var(--fg)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          URGENT: Your Microsoft 365…
         </div>
-        <div style={{ fontSize: 12, color: 'var(--fg-muted)', marginTop: 4 }}>
-          Dear customer, we have detected unusual…
+        <div style={{ fontSize: 11.5, color: 'var(--fg-muted)', marginTop: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          Dear customer, we have detected…
         </div>
         {flagged && !quarantined && (
           <span style={{
-            position: 'absolute', top: 12, right: 12, fontSize: 10.5,
-            padding: '2px 7px', borderRadius: 4, background: 'var(--danger)',
+            position: 'absolute', top: 10, right: 10, fontSize: 10,
+            padding: '2px 6px', borderRadius: 4, background: 'var(--danger)',
             color: 'white', fontFamily: 'var(--font-mono)',
             animation: 'fh-flag .4s ease-out',
           }}>PHISHING</span>
         )}
         {quarantined && (
           <span style={{
-            position: 'absolute', top: 12, right: 12, fontSize: 10.5,
-            padding: '2px 7px', borderRadius: 4, background: 'var(--fg-faint)',
+            position: 'absolute', top: 10, right: 10, fontSize: 10,
+            padding: '2px 6px', borderRadius: 4, background: 'var(--fg-faint)',
             color: 'white', fontFamily: 'var(--font-mono)',
           }}>QUARANTINED</span>
         )}
       </div>
 
       {mails.map((m, i) => (
-        <div key={i} style={{ padding: '14px 16px', borderBottom: '1px solid var(--border)', opacity: m.read ? 0.65 : 1 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
-            <span style={{ fontWeight: m.read ? 400 : 600 }}>{m.from}</span>
-            <span style={{ fontSize: 12, color: 'var(--fg-muted)' }}>{m.time}</span>
+        <div key={i} style={{ padding: '12px 14px', borderBottom: '1px solid var(--border)', opacity: m.read ? 0.65 : 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, gap: 4 }}>
+            <span style={{ fontWeight: m.read ? 400 : 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.from}</span>
+            <span style={{ fontSize: 11, color: 'var(--fg-muted)', flexShrink: 0 }}>{m.time}</span>
           </div>
-          <div style={{ fontSize: 13.5, fontWeight: m.read ? 400 : 500, marginTop: 4 }}>{m.subj}</div>
-          <div style={{ fontSize: 12, color: 'var(--fg-muted)', marginTop: 3 }}>{m.preview}</div>
+          <div style={{ fontSize: 12.5, fontWeight: m.read ? 400 : 500, marginTop: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.subj}</div>
+          <div style={{ fontSize: 11.5, color: 'var(--fg-muted)', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.preview}</div>
         </div>
       ))}
     </div>
@@ -312,40 +341,45 @@ function Highlight({ children, on }) {
   )
 }
 
-function MailReader({ arrived, flagged, verdict, quarantined }) {
+function MailReader({ arrived, flagged, quarantined }) {
   return (
-    <div style={{ position: 'relative', background: 'var(--bg-elev)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+    <div style={{
+      borderRight: '1px solid var(--border)',
+      background: 'var(--bg-elev)',
+      overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column',
+      minWidth: 0,
+    }}>
       {!arrived && (
-        <div style={{ flex: 1, display: 'grid', placeItems: 'center', color: 'var(--fg-faint)', fontSize: 14 }}>
+        <div style={{ flex: 1, display: 'grid', placeItems: 'center', color: 'var(--fg-faint)', fontSize: 13 }}>
           Select an email to read.
         </div>
       )}
       {arrived && (
         <div style={{ flex: 1, overflow: 'auto' }}>
-          {/* email header */}
-          <div style={{ padding: '24px 36px 20px', borderBottom: '1px solid var(--border)' }}>
-            <div style={{ fontSize: 22, fontWeight: 600, lineHeight: 1.3 }}>
+          <div style={{ padding: '20px 24px 16px', borderBottom: '1px solid var(--border)' }}>
+            <div style={{ fontSize: 17, fontWeight: 600, lineHeight: 1.35 }}>
               URGENT: Your Microsoft 365 license expires in 24 hours
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 14 }}>
               <div style={{
-                width: 36, height: 36, borderRadius: '50%', background: 'var(--bg-soft)',
-                display: 'grid', placeItems: 'center', fontSize: 13, color: 'var(--fg-muted)', flexShrink: 0,
+                width: 32, height: 32, borderRadius: '50%', background: 'var(--bg-soft)',
+                display: 'grid', placeItems: 'center', fontSize: 12, color: 'var(--fg-muted)', flexShrink: 0,
               }}>MB</div>
-              <div style={{ fontSize: 13.5 }}>
-                <div>
+              <div style={{ fontSize: 13, minWidth: 0 }}>
+                <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   <strong>Microsoft Billing</strong>{' '}
                   &lt;<Highlight on={flagged}>billing@micros0ft-secure.com</Highlight>&gt;
                 </div>
-                <div style={{ color: 'var(--fg-muted)', marginTop: 3 }}>to: m.berzins@acme.lv · Today 09:23</div>
+                <div style={{ color: 'var(--fg-muted)', marginTop: 2, fontSize: 12 }}>to: m.berzins@acme.lv · Today 09:23</div>
               </div>
             </div>
           </div>
 
-          {/* email body */}
-          <div style={{ padding: '28px 36px', fontSize: 15, lineHeight: 1.8, color: 'var(--fg)', maxWidth: 680 }}>
+          <div style={{ padding: '20px 24px', fontSize: 14, lineHeight: 1.8, color: 'var(--fg)' }}>
             <p style={{ margin: 0 }}>Dear customer,</p>
-            <p style={{ marginTop: 16 }}>
+            <p style={{ marginTop: 14 }}>
               We have detected{' '}
               <Highlight on={flagged}>unusual activity</Highlight>{' '}
               on your Microsoft 365 account. To avoid permanent suspension, please{' '}
@@ -353,70 +387,173 @@ function MailReader({ arrived, flagged, verdict, quarantined }) {
               by clicking the secure portal link below{' '}
               <Highlight on={flagged}>within 24 hours</Highlight>.
             </p>
-            <p style={{ marginTop: 28 }}>
+            <p style={{ marginTop: 22 }}>
               <span style={{
-                display: 'inline-block', padding: '11px 22px', borderRadius: 7,
+                display: 'inline-block', padding: '10px 18px', borderRadius: 7,
                 background: flagged ? 'var(--bg-soft)' : '#0a66c2',
                 color: flagged ? 'var(--fg-faint)' : 'white',
                 textDecoration: flagged ? 'line-through' : 'none',
-                fontSize: 14, fontWeight: 600,
+                fontSize: 13.5, fontWeight: 600,
               }}>
                 Verify my account →
               </span>
             </p>
-            <p style={{ color: 'var(--fg-muted)', fontSize: 13, marginTop: 36 }}>
+            <p style={{ color: 'var(--fg-muted)', fontSize: 12, marginTop: 28 }}>
               Microsoft Corporation · One Microsoft Way · Redmond, WA
             </p>
           </div>
         </div>
       )}
+    </div>
+  )
+}
 
-      {/* verdict panel — top right overlay */}
-      {verdict && (
-        <div style={{ position: 'absolute', right: 20, top: 20, width: 280, animation: 'fh-flag .35s ease-out' }}>
-          <div className="card" style={{ overflow: 'hidden', boxShadow: 'var(--shadow-pop)' }}>
+function FishpoPanel({ arrived, verdict, quarantined, t }) {
+  const scanning = arrived && !verdict
+  const scanPct = scanning
+    ? Math.min(100, ((t - 1.2) / (5.4 - 1.2)) * 100)
+    : verdict ? 100 : 0
+
+  const checks = [
+    { at: 2.0, label: 'Sender domain lookup',      warn: false },
+    { at: 2.8, label: 'Token pattern analysis',    warn: false },
+    { at: 3.5, label: 'Threat DB cross-reference', warn: false },
+    { at: 4.2, label: 'Urgency cues: 4 detected',  warn: true  },
+    { at: 4.8, label: 'Link target flagged',        warn: true  },
+  ]
+  const visibleChecks = checks.filter(c => t > c.at)
+
+  const headerTone = verdict ? 'danger' : arrived ? 'warn' : 'ok'
+  const headerLabel = verdict ? '· phishing' : arrived ? '· scanning' : '· monitoring'
+
+  return (
+    <div style={{
+      background: 'var(--bg)',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden',
+      minWidth: 0,
+      borderLeft: '2px solid var(--border)',
+    }}>
+      {/* panel header */}
+      <div style={{
+        padding: '10px 12px',
+        borderBottom: '1px solid var(--border)',
+        background: 'var(--bg-elev)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 7,
+        flexShrink: 0,
+      }}>
+        <StatusDot tone={headerTone} />
+        <span style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: 11,
+          fontWeight: 700,
+          letterSpacing: '0.07em',
+          color: verdict ? 'var(--danger)' : 'var(--fg)',
+          whiteSpace: 'nowrap',
+        }}>FISHPO</span>
+        <span style={{ fontSize: 10.5, color: 'var(--fg-muted)', whiteSpace: 'nowrap' }}>{headerLabel}</span>
+      </div>
+
+      <div style={{ flex: 1, overflow: 'auto', padding: '12px 12px' }}>
+        {!arrived && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <div style={{
-              padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              background: 'var(--danger-soft)', color: 'var(--danger)',
-              fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.06em',
+              display: 'flex', alignItems: 'center', gap: 8,
+              padding: '9px 10px', borderRadius: 7,
+              background: 'var(--bg-elev)',
             }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Icon.Alert size={12} /> FISHPO · PHISHING
-              </span>
-              <span>0.6s</span>
+              <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--ok)', animation: 'fh-pulse 2s ease-in-out infinite', flexShrink: 0 }} />
+              <span style={{ fontSize: 12, color: 'var(--fg-muted)' }}>Monitoring inbox</span>
             </div>
-            <div style={{ padding: '16px 16px 20px' }}>
-              <div style={{ fontSize: 26, fontWeight: 700 }}>Risk score 98 / 100</div>
-              <div style={{ fontSize: 12.5, color: 'var(--fg-muted)', marginTop: 5 }}>
-                Credential harvest · brand impersonation
-              </div>
-              <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 9, fontSize: 13 }}>
-                {[
-                  ['Sender',       'Lookalike of microsoft.com'],
-                  ['Domain age',   'Registered 2 days ago'],
-                  ['Urgency cues', '4 detected'],
-                  ['Link target',  'micr0soft-login.ru'],
-                ].map(([k, v]) => (
-                  <div key={k} style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
-                    <span style={{ color: 'var(--fg-muted)' }}>{k}</span>
-                    <span style={{ color: 'var(--fg)', textAlign: 'right' }}>{v}</span>
-                  </div>
-                ))}
-              </div>
-              {quarantined && (
-                <div style={{
-                  marginTop: 16, padding: '8px 12px', borderRadius: 8,
-                  background: 'var(--accent-soft)', color: 'var(--accent)',
-                  fontFamily: 'var(--font-mono)', fontSize: 11.5,
-                  display: 'flex', alignItems: 'center', gap: 8,
-                }}>
-                  <Icon.Check size={13} /> Email quarantined automatically
+            <div style={{ fontSize: 11.5, color: 'var(--fg-faint)', lineHeight: 1.6, padding: '0 2px' }}>
+              Watching for phishing, BEC, and credential harvesting.
+            </div>
+            <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 5 }}>
+              {['Real-time scanning', 'Token analysis', 'Domain reputation'].map(f => (
+                <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, color: 'var(--fg-muted)' }}>
+                  <Icon.Check size={11} /> {f}
                 </div>
-              )}
+              ))}
             </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {scanning && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--fg)' }}>Analyzing email…</div>
+            <div style={{ height: 4, borderRadius: 3, background: 'var(--bg-soft)', overflow: 'hidden' }}>
+              <div style={{
+                height: '100%', borderRadius: 3, background: 'var(--accent)',
+                width: `${scanPct}%`, transition: 'width .3s linear',
+              }} />
+            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, color: 'var(--fg-faint)' }}>
+              {Math.round(scanPct)}%
+            </div>
+            <div style={{ marginTop: 2, display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {visibleChecks.map((c, i) => (
+                <div key={i} style={{
+                  display: 'flex', alignItems: 'flex-start', gap: 6,
+                  fontSize: 11.5,
+                  color: c.warn ? 'var(--danger)' : 'var(--fg)',
+                  animation: 'fh-flag .3s ease-out',
+                }}>
+                  <span style={{ flexShrink: 0, marginTop: 1 }}>
+                    {c.warn ? <Icon.Alert size={11} /> : <Icon.Check size={11} />}
+                  </span>
+                  {c.label}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {verdict && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, animation: 'fh-flag .35s ease-out' }}>
+            <div style={{
+              padding: '7px 10px', borderRadius: 6,
+              background: 'var(--danger-soft)',
+              display: 'flex', alignItems: 'center', gap: 6,
+              color: 'var(--danger)',
+              fontFamily: 'var(--font-mono)', fontSize: 10.5,
+              letterSpacing: '0.06em',
+            }}>
+              <Icon.Alert size={11} /> PHISHING DETECTED
+            </div>
+            <div>
+              <div style={{ fontSize: 26, fontWeight: 700, color: 'var(--fg)', lineHeight: 1 }}>98<span style={{ fontSize: 14, fontWeight: 400, color: 'var(--fg-muted)' }}> / 100</span></div>
+              <div style={{ fontSize: 11.5, color: 'var(--fg-muted)', marginTop: 4 }}>Credential harvest · brand impersonation</div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginTop: 2 }}>
+              {[
+                ['Sender',       'Lookalike domain'],
+                ['Domain age',   '2 days old'],
+                ['Urgency cues', '4 detected'],
+                ['Link target',  'micr0soft-login.ru'],
+              ].map(([k, v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', gap: 6, fontSize: 12 }}>
+                  <span style={{ color: 'var(--fg-muted)', flexShrink: 0 }}>{k}</span>
+                  <span style={{ color: 'var(--fg)', textAlign: 'right', fontSize: 11.5 }}>{v}</span>
+                </div>
+              ))}
+            </div>
+            {quarantined && (
+              <div style={{
+                padding: '7px 10px', borderRadius: 6,
+                background: 'var(--accent-soft)', color: 'var(--accent)',
+                fontFamily: 'var(--font-mono)', fontSize: 11,
+                display: 'flex', alignItems: 'center', gap: 6,
+                animation: 'fh-flag .35s ease-out',
+              }}>
+                <Icon.Check size={12} /> Quarantined automatically
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
