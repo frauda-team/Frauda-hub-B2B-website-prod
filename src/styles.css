@@ -329,6 +329,15 @@ a { color: inherit; }
   .hero-blob { display: none; }
 }
 
+/* ── interactive demo iframe wrapper — wider on mobile ── */
+.demo-iframe-wrap {
+  width: 68%;
+  margin: 0 auto;
+}
+@media (max-width: 680px) {
+  .demo-iframe-wrap { width: 95%; }
+}
+
 /* ── demo CTA card — text+buttons reflow to column on mobile ── */
 .demo-cta-card {
   display: grid;

@@ -156,9 +156,7 @@ function InteractiveDemo() {
           Live interactive demo — no install, no signup. A suspicious email arrives in 1 second. Click it and watch the analysis.
         </p>
       </div>
-      <div style={{
-        width: '68%',
-        margin: '0 auto',
+      <div className="demo-iframe-wrap" style={{
         height: 820,
         borderRadius: 'var(--r-xl)',
         overflow: 'hidden',
